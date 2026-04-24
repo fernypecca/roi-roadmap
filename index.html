@@ -1006,88 +1006,200 @@
   }
 
   function buildPrompt(cac, avgValue, roi, bookings, desc) {
-    return `You are a senior direct-response copywriter who specializes in the wedding industry.
-Write ads for a wedding vendor with these exact numbers:
+    const yr = Math.round(bookings * 12);
+    const roiAngle = roi > 8
+      ? `This vendor has strong pricing power. Use prestige and exclusivity — scarcity, limited dates, high-value anchoring. Make the price feel like proof of quality, not a barrier.`
+      : roi >= 3
+      ? `Solid ROI but couples need a clear reason to choose this vendor over others. Lead with specificity and social proof. Show exactly what they get and why others trusted them.`
+      : `ROI is tight, meaning this vendor needs high-intent buyers only. Write ruthlessly direct copy: who it's for, what they get, why to act now. No warmup. No fluff.`;
+    return `You are a world-class direct-response copywriter who has written winning ads for 300+ wedding vendors. You know that vague copy kills conversions. Specific copy wins.
 
-- Monthly CAC: $${Math.round(cac)}
-- Average booking value: $${Math.round(avgValue)}
-- ROI ratio: ${roi.toFixed(1)}x
-- Current monthly bookings: ${bookings}
+VENDOR DATA — use these numbers directly in the ad copy where natural:
+- Cost per booked couple: $${Math.round(cac)}
+- Average booking value: $${Math.round(avgValue).toLocaleString()}
+- Monthly bookings: ${bookings} couples/month (${yr} per year)
+- ROI multiplier: ${roi.toFixed(1)}x (every $1 in marketing returns $${roi.toFixed(1)})
 - Ideal couple: ${desc}
 
-Strategic context:
-- If ROI ratio > 8x: Write aspirational, brand-led copy. They can afford to invest in awareness.
-- If ROI ratio 3-8x: Write conversion-focused copy with clear value props and social proof hooks.
-- If ROI ratio < 3x: Write tight, bottom-of-funnel copy targeting high-intent couples only. No fluff.
+STRATEGY FOR THIS VENDOR:
+${roiAngle}
 
-Return ONLY valid JSON in this exact structure (no markdown, no preamble):
+CONVERSION RULES YOU MUST FOLLOW:
+1. Specificity always beats vague. "$${Math.round(avgValue).toLocaleString()} packages" beats "premium." "${bookings} couples per month" beats "exclusive." Use the numbers.
+2. Every Meta ad must open with a scroll-stopping first sentence (the hook) — something personal, surprising, or that calls out the exact reader.
+3. The three Meta ads must use THREE different psychological angles: (1) FOMO/scarcity, (2) social proof/trust, (3) direct value/transformation. Do not repeat angles.
+4. Google ads must match real search intent — think like someone typing "wedding [service] [location]" with credit card in hand.
+5. Every ad makes ONE promise and keeps it. No laundry lists.
+6. The "why" field is a plain-English note for the vendor explaining the conversion psychology. Write it like you're briefing a smart client.
 
+Return ONLY valid JSON (no markdown code blocks, no preamble):
 {
+  "strategy_note": "One sentence explaining the overall angle and why it fits this vendor's ROI profile",
   "meta_ads": [
-    { "headline": "...", "primary_text": "...", "cta": "Book Now" },
-    { "headline": "...", "primary_text": "...", "cta": "Learn More" },
-    { "headline": "...", "primary_text": "...", "cta": "Get Quote" }
+    {
+      "hook": "Scroll-stopping opening line, max 15 words, reads like a human wrote it",
+      "headline": "Ad headline, max 40 chars",
+      "primary_text": "Full ad body starting with the hook. Be specific, use numbers where natural. Max 220 chars total.",
+      "cta": "Book Now",
+      "why": "Plain-English explanation of which psychological lever this uses and why it converts for this vendor specifically"
+    },
+    {
+      "hook": "...",
+      "headline": "...",
+      "primary_text": "...",
+      "cta": "See Our Work",
+      "why": "..."
+    },
+    {
+      "hook": "...",
+      "headline": "...",
+      "primary_text": "...",
+      "cta": "Get a Quote",
+      "why": "..."
+    }
   ],
   "google_ads": [
-    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."] },
-    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."] },
-    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."] }
+    {
+      "headlines": ["Headline 1 ≤30 chars", "Headline 2 ≤30 chars", "Headline 3 ≤30 chars"],
+      "descriptions": ["Description 1 ≤90 chars — specific, benefit-led", "Description 2 ≤90 chars — handle a common objection or add proof"],
+      "why": "One sentence on the search intent this targets and why these headlines win the click"
+    },
+    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."], "why": "..." },
+    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."], "why": "..." }
   ],
-  "image_prompt_detailed": "...",
-  "image_prompt_social": "..."
+  "image_prompt_detailed": "Detailed Midjourney/DALL·E prompt for a hero image that matches this vendor's couple profile and style",
+  "image_prompt_social": "Short version of the same prompt for quick social media use"
 }
 
-Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 chars, Google headlines ≤30 chars, Google descriptions ≤90 chars. Write like a human, not a marketer. No emojis unless they fit the couple's vibe.`;
+Write like a human copywriter billing $500/hour. No AI-sounding phrases. No emojis unless the couple profile explicitly calls for them.`;
   }
 
   function getFallbackAds(cac, avgValue, roi, bookings, desc) {
     const val  = Math.round(avgValue).toLocaleString();
     const yr   = Math.round(bookings * 12);
-    const slug = desc.split(',')[0];
+    const mo   = Math.round(bookings);
+    const slug = desc.split(',')[0].trim();
+    const roiRnd = roi.toFixed(1);
     return {
+      strategy_note: `With a ${roiRnd}x ROI, your marketing is already profitable — these ads are designed to push your booking rate higher by making your value undeniable to the right couples.`,
       meta_ads: [
-        { headline: "Your wedding, done right", primary_text: `Couples who book with us invest an average of $${val} on a day they talk about forever. Limited dates available this season.`, cta: "Book Now" },
-        { headline: `Only ${Math.round(bookings)} couples per month`, primary_text: `Because your wedding isn't a number. See our work, meet our team, and decide if we're the right fit — no pressure, no hard sell.`, cta: "Learn More" },
-        { headline: "Real weddings. Real results.", primary_text: `Over ${yr}+ couples trusted us last year. Here's what they said — and what their day actually looked like.`, cta: "See Our Work" }
+        {
+          hook: `We only take ${mo} couples per month. Here's why.`,
+          headline: `${mo} Spots. This Season.`,
+          primary_text: `We only take ${mo} couples per month. Here's why: your wedding gets our full attention — not a slot in a packed calendar. $${val} average investment. ${yr} couples served. A few dates still open this season.`,
+          cta: "Book Now",
+          why: "FOMO + scarcity angle. Turning a small booking volume into a feature (exclusivity) rather than a limitation. The number gives it credibility — vague 'limited availability' claims don't convert, specific ones do."
+        },
+        {
+          hook: `${yr} couples last year. Here's what they all had in common.`,
+          headline: `Trusted by ${yr} Couples`,
+          primary_text: `${yr} couples last year. Here's what they all had in common: they knew exactly what they were getting before they signed. See real weddings, real prices, and real reviews — no surprises.`,
+          cta: "See Our Work",
+          why: "Social proof angle. Leading with a specific number instantly builds trust. The 'no surprises' line addresses the #1 anxiety couples have when booking a vendor — price transparency."
+        },
+        {
+          hook: `Most couples overpay for their wedding vendor by 40%. Here's how to avoid it.`,
+          headline: `Know What You're Paying For`,
+          primary_text: `Most couples overpay for their wedding vendor by 40%. Our $${val} package includes everything in writing — no add-ons, no surprise fees. See exactly what you get before you commit.`,
+          cta: "Get a Quote",
+          why: "Direct value angle. Leads with a challenger insight (overpaying claim) that triggers curiosity, then positions this vendor as the transparent, safe choice. Price anchoring with the specific value builds confidence."
+        }
       ],
       google_ads: [
-        { headlines: ["Wedding Vendor You'll Love", "Trusted by Local Couples", `From $${val} Per Event`], descriptions: ["Personalized service for your wedding day. View availability and book a free consultation today.", "Real reviews from real couples. See why we're the top-rated choice in your area."] },
-        { headlines: ["Limited Dates This Season", "Book Before They're Gone", "Award-Winning Wedding Team"], descriptions: [`We take only ${Math.round(bookings)} couples per season so every event gets our full attention.`, `Starting at $${val}. Request a custom quote based on your vision and budget.`] },
-        { headlines: ["Your Day, Your Vision", "Expert Wedding Planning", "Free Consultation Today"], descriptions: ["We listen before we plan. Tell us about your ideal day and we'll show you how to make it real.", "No cookie-cutter packages. Every wedding we do is built around what matters most to you."] }
+        {
+          headlines: [`${slug} — ${mo} Spots Left`, `$${val} Full Package`, "Book a Free Consult Today"],
+          descriptions: [
+            `Only ${mo} couples per month. See availability, review pricing, and book your free consult — no pressure.`,
+            `${yr} weddings delivered. Transparent pricing from $${val}. Real reviews. Real results. See our work now.`
+          ],
+          why: "Targets high-intent 'wedding vendor near me' searches. Scarcity in the first headline + price in the second drives click-through from couples ready to decide."
+        },
+        {
+          headlines: [`Wedding ${slug}`, `Trusted by ${yr} Couples`, "Get Your Custom Quote"],
+          descriptions: [
+            `Personalized service for your wedding day. ${yr} happy couples. View our portfolio and check open dates.`,
+            `Packages from $${val}. No hidden fees, no surprises. Request a custom quote in under 2 minutes.`
+          ],
+          why: "Captures broader 'wedding [service]' searches and converts with proof + price transparency — the two things that matter most to couples in the decision phase."
+        },
+        {
+          headlines: ["Award-Winning Wedding Team", `Only ${mo} Bookings/Month`, "Free Consultation — Book Now"],
+          descriptions: [
+            `We limit ourselves to ${mo} couples per month so every wedding gets our complete focus and care.`,
+            `Starting at $${val}. Tell us your vision and we'll show you exactly how to make it happen.`
+          ],
+          why: "Handles the 'will they actually care about MY wedding' objection head-on. The limited-spots positioning is the answer — it signals that you're not a factory."
+        }
       ],
-      image_prompt_detailed: `A photorealistic wedding scene: ${desc}. Golden hour lighting, soft bokeh background, editorial style photography. Bride and groom in a genuine emotional moment, not posed. Shot on medium format camera, warm tones, film-inspired color grading. Clean negative space in upper third for text overlay. Aspect ratio 4:5 for Instagram feed. Hyper-detailed, high resolution.`,
-      image_prompt_social: `Elegant wedding couple, golden hour light, editorial photography, warm film tones. ${slug}. Minimal, space for text overlay at top. 4:5 ratio.`
+      image_prompt_detailed: `A photorealistic editorial wedding scene featuring ${slug}. Genuine emotional moment between the couple — not posed, caught mid-laugh or mid-glance. Golden hour backlight, soft bokeh background, medium format camera aesthetic. Warm film-inspired color grading (slightly desaturated greens, warm highlights). Clean negative space in the upper third of the frame for text overlay. Aspect ratio 4:5 for Instagram feed. Hyper-detailed, magazine-quality. The couple looks effortlessly stylish, not overdressed.`,
+      image_prompt_social: `Editorial wedding photo, ${slug}, golden hour, film grain, warm tones, couple candid moment. Negative space top third for text. 4:5 vertical. Magazine quality.`
     };
   }
 
   function renderAdResults(data) {
-    document.getElementById('tab-meta').innerHTML = data.meta_ads.map((ad, i) => `
-      <div class="ad-card">
-        <div class="ad-headline">${escHtml(ad.headline)}</div>
-        <div class="ad-body">${escHtml(ad.primary_text)}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <span class="ad-cta-pill">${escHtml(ad.cta)}</span>
-          <button class="copy-btn" onclick="copyAdText('meta',${i},this)">Copy</button>
+    const strategyBanner = data.strategy_note ? `
+      <div style="background:linear-gradient(135deg,#f3eeff,#ede5f8);border-radius:14px;padding:14px 18px;margin-bottom:20px;border-left:3px solid var(--purple);display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">🎯</span>
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:4px;">Your Ad Strategy</div>
+          <div style="font-size:13px;font-weight:600;color:#3d1e6b;line-height:1.5;">${escHtml(data.strategy_note)}</div>
         </div>
+      </div>` : '';
+
+    const adLabel = ['Ad 1 — Scarcity & FOMO', 'Ad 2 — Social Proof', 'Ad 3 — Direct Value'];
+
+    document.getElementById('tab-meta').innerHTML = strategyBanner + data.meta_ads.map((ad, i) => `
+      <div class="ad-card">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:10px;">${adLabel[i] || 'Ad ' + (i+1)}</div>
+        <div style="background:#f8f5ff;border-radius:10px;padding:14px 16px;margin-bottom:12px;border:1px solid #e8dff5;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9b7ec8;margin-bottom:6px;">META AD PREVIEW</div>
+          ${ad.hook ? `<div style="font-size:14px;font-weight:800;color:#1A1625;line-height:1.45;margin-bottom:8px;">${escHtml(ad.hook)}</div>` : ''}
+          <div style="font-size:13px;font-weight:500;color:#3d2b5e;line-height:1.6;margin-bottom:12px;">${escHtml(ad.primary_text)}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <div>
+              <span style="font-size:10px;font-weight:700;color:#9b7ec8;text-transform:uppercase;letter-spacing:0.06em;">Headline: </span>
+              <span style="font-size:13px;font-weight:700;color:#1A1625;">${escHtml(ad.headline)}</span>
+            </div>
+            <span class="ad-cta-pill">${escHtml(ad.cta)}</span>
+          </div>
+        </div>
+        ${ad.why ? `<div style="background:#fffbee;border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;">
+          <span style="font-size:13px;flex-shrink:0;">💡</span>
+          <div style="font-size:12px;font-weight:600;color:#7a6000;line-height:1.55;">${escHtml(ad.why)}</div>
+        </div>` : ''}
+        <div style="text-align:right;"><button class="copy-btn" onclick="copyAdText('meta',${i},this)">Copy ad</button></div>
       </div>`).join('');
 
-    document.getElementById('tab-google').innerHTML = data.google_ads.map((ad, i) => `
+    document.getElementById('tab-google').innerHTML = strategyBanner + data.google_ads.map((ad, i) => `
       <div class="ad-card">
-        <div style="margin-bottom:10px;">${ad.headlines.map(h => `<span class="ad-hl-item">${escHtml(h)}</span>`).join('')}</div>
-        <div style="margin-bottom:12px;">${ad.descriptions.map(d => `<span class="ad-desc-item">${escHtml(d)}</span>`).join('')}</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:10px;">Search Ad ${i+1}</div>
+        <div style="background:#f0f4ff;border-radius:10px;padding:14px 16px;margin-bottom:12px;border:1px solid #dce6ff;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4a6aad;margin-bottom:8px;">GOOGLE SEARCH PREVIEW</div>
+          <div style="font-size:15px;font-weight:700;color:#1a0dab;margin-bottom:6px;line-height:1.3;">${ad.headlines.map(h => `<span>${escHtml(h)}</span>`).join(' <span style="color:#aaa;font-weight:400;">·</span> ')}</div>
+          <div style="font-size:12px;font-weight:500;color:#3a5a2a;margin-bottom:8px;">weddingpro.com · Sponsored</div>
+          ${ad.descriptions.map(d => `<div style="font-size:13px;color:#3d2b5e;line-height:1.55;margin-bottom:4px;">${escHtml(d)}</div>`).join('')}
+        </div>
+        ${ad.why ? `<div style="background:#fffbee;border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;">
+          <span style="font-size:13px;flex-shrink:0;">💡</span>
+          <div style="font-size:12px;font-weight:600;color:#7a6000;line-height:1.55;">${escHtml(ad.why)}</div>
+        </div>` : ''}
         <div style="text-align:right;"><button class="copy-btn" onclick="copyAdText('google',${i},this)">Copy all</button></div>
       </div>`).join('');
 
     document.getElementById('tab-image').innerHTML = `
-      <div style="margin-bottom:20px;">
-        <div class="ip-label">Detailed Prompt — Midjourney / DALL·E / Photoroom</div>
-        <div class="ip-text">${escHtml(data.image_prompt_detailed)}</div>
-        <button class="copy-btn" onclick="copyAdText('image',0,this)">Copy prompt</button>
+      <div style="background:linear-gradient(135deg,#f3eeff,#ede5f8);border-radius:14px;padding:14px 18px;margin-bottom:20px;border-left:3px solid var(--purple);">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:4px;">How to use these prompts</div>
+        <div style="font-size:13px;font-weight:600;color:#3d1e6b;line-height:1.5;">Paste either prompt into Midjourney, DALL·E, or Photoroom's AI image generator to create your hero ad image. The detailed version gives you full creative control; the short version is great for quick social posts.</div>
       </div>
-      <div>
-        <div class="ip-label">Quick Social Post Prompt</div>
+      <div class="ad-card" style="margin-bottom:16px;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:8px;">Detailed Prompt — Midjourney / DALL·E / Photoroom</div>
+        <div class="ip-text">${escHtml(data.image_prompt_detailed)}</div>
+        <div style="text-align:right;margin-top:12px;"><button class="copy-btn" onclick="copyAdText('image',0,this)">Copy prompt</button></div>
+      </div>
+      <div class="ad-card">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:8px;">Quick Social Post Prompt</div>
         <div class="ip-text">${escHtml(data.image_prompt_social)}</div>
-        <button class="copy-btn" onclick="copyAdText('image',1,this)">Copy prompt</button>
+        <div style="text-align:right;margin-top:12px;"><button class="copy-btn" onclick="copyAdText('image',1,this)">Copy prompt</button></div>
       </div>`;
   }
 
@@ -1100,7 +1212,7 @@ Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 c
     let text = '';
     if (type === 'meta') {
       const ad = currentAds.meta_ads[index];
-      text = `${ad.headline}\n\n${ad.primary_text}\n\nCTA: ${ad.cta}`;
+      text = `HEADLINE: ${ad.headline}\n\nPRIMARY TEXT:\n${ad.primary_text}\n\nCTA: ${ad.cta}`;
     } else if (type === 'google') {
       const ad = currentAds.google_ads[index];
       text = `Headlines:\n${ad.headlines.join('\n')}\n\nDescriptions:\n${ad.descriptions.join('\n')}`;
