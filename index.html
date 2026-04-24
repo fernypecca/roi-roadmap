@@ -4,20 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The ROI Roadmap — Wedding Vendor Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;0,6..12,800;0,6..12,900;1,6..12,400&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --purple:       #5C2F8A;
-      --purple-mid:   #7A4AAD;
-      --purple-light: #EFE6F8;
-      --purple-xlight:#F7F2FC;
-      --yellow:       #F5C844;
-      --yellow-light: #FEF7DC;
-      --cream:        #FDF1EB;
-      --charcoal:     #1C1C1C;
-      --muted:        #8A8490;
-      --border:       #EDE8E6;
-      --dark-btn:     #1C1C1C;
+      --purple:        #5C2F8A;
+      --purple-mid:    #7A4AAD;
+      --purple-light:  #EFE6F8;
+      --purple-xlight: #F7F2FC;
+      --yellow:        #F5C844;
+      --yellow-light:  #FEF7DC;
+      --cream:         #FDF1EB;
+      --cream-dark:    #F5E8DE;
+      --charcoal:      #1A1625;
+      --muted:         #8A8490;
+      --muted-light:   #B8B3BE;
+      --border:        #EAE4E0;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -25,7 +29,7 @@
     body {
       background-color: var(--cream);
       color: var(--charcoal);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -33,466 +37,441 @@
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type=number] { -moz-appearance: textfield; }
 
+    /* ── Typography ───────────────────────────────────────────── */
+    .display-title {
+      font-size: 2.75rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--charcoal);
+    }
+    .display-sub {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .section-eyebrow {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+    }
+    .section-sub {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── Cards ────────────────────────────────────────────────── */
+    .card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 4px rgba(26,22,37,0.04), 0 8px 24px rgba(26,22,37,0.06);
+    }
+    .card-accent {
+      border-top: 3px solid var(--purple);
+    }
+    .metric-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 4px rgba(26,22,37,0.04), 0 8px 24px rgba(26,22,37,0.06);
+      padding: 22px 26px;
+      flex: 1;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .metric-card:hover {
+      box-shadow: 0 4px 8px rgba(92,47,138,0.08), 0 12px 32px rgba(92,47,138,0.10);
+      transform: translateY(-1px);
+    }
+
+    /* ── Big numbers ──────────────────────────────────────────── */
     .big-num {
       font-variant-numeric: tabular-nums;
       font-feature-settings: "tnum";
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       line-height: 1;
+      font-weight: 900;
+    }
+    .metric-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple-mid);
+      margin-bottom: 8px;
+    }
+    .metric-caption {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted-light);
+      margin-top: 6px;
     }
 
-    .card {
-      background: #FFFFFF;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 2px rgba(44,40,37,0.04), 0 4px 16px rgba(44,40,37,0.04);
-    }
-
+    /* ── Inputs ───────────────────────────────────────────────── */
+    .input-wrap { position: relative; }
     .input-field {
       width: 100%;
-      padding: 9px 12px;
+      padding: 10px 13px;
       border: 1.5px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 14px;
+      font-weight: 600;
+      font-family: 'Nunito Sans', sans-serif;
       color: var(--charcoal);
       background: #FEFEFE;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
     }
     .input-field:focus {
       outline: none;
       border-color: var(--purple);
-      box-shadow: 0 0 0 3px rgba(92,47,138,0.12);
+      background: var(--purple-xlight);
+      box-shadow: 0 0 0 4px rgba(92,47,138,0.10);
     }
+    .input-field:hover:not(:focus) { border-color: #C8C0CC; }
     .input-prefix {
       position: absolute;
-      left: 11px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       font-size: 13px;
+      font-weight: 700;
       color: var(--muted);
       pointer-events: none;
     }
-    .has-prefix { padding-left: 24px !important; }
+    .has-prefix { padding-left: 26px !important; }
 
     label {
       display: block;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
+      font-weight: 800;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin-bottom: 7px;
     }
 
-    .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--charcoal);
-    }
-    .section-sub {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
+    /* ── Divider ──────────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 18px 0;
     }
 
-    .metric-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--purple-mid);
-      margin-bottom: 6px;
-    }
-
-    .metric-caption {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .bar-track {
-      flex: 1;
-      height: 26px;
-      border-radius: 6px;
-      background: var(--purple-xlight);
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: 6px;
-      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
+    /* ── Badges ───────────────────────────────────────────────── */
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 100px;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 800;
+      letter-spacing: 0.02em;
       white-space: nowrap;
     }
     .badge-green  { background: #E8F5E9; color: #2E7D32; }
     .badge-yellow { background: #FFF8E1; color: #B45309; }
     .badge-red    { background: #FEECEB; color: #C62828; }
 
-    .insight-box {
-      border-radius: 12px;
-      background: var(--purple-xlight);
-      border: 1px solid var(--purple-light);
-      padding: 14px 18px;
-    }
-    .insight-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 4px;
-    }
-    .insight-text {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #3D2B5A;
-    }
-
+    /* ── Buttons ──────────────────────────────────────────────── */
     .btn-ghost {
-      padding: 7px 16px;
+      padding: 9px 20px;
       border-radius: 100px;
       border: 1.5px solid var(--border);
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Nunito Sans', sans-serif;
       color: var(--muted);
       background: transparent;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: all 0.15s;
     }
-    .btn-ghost:hover { background: var(--purple-xlight); }
+    .btn-ghost:hover { background: var(--purple-xlight); border-color: var(--purple-light); color: var(--purple); }
 
     .btn-primary {
-      padding: 7px 16px;
+      padding: 9px 22px;
       border-radius: 100px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
+      font-family: 'Nunito Sans', sans-serif;
+      letter-spacing: 0.01em;
       color: white;
       background: var(--purple);
       border: none;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(92,47,138,0.25);
     }
-    .btn-primary:hover  { background: var(--purple-mid); }
+    .btn-primary:hover  { background: var(--purple-mid); box-shadow: 0 4px 14px rgba(92,47,138,0.35); }
     .btn-primary:active { transform: scale(0.97); }
 
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 14px 0;
+    /* ── Bar chart ────────────────────────────────────────────── */
+    .bar-track {
+      flex: 1;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--purple-xlight);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @media (max-width: 1023px) {
-      .main-grid  { grid-template-columns: 1fr !important; }
-      .sim-grid   { grid-template-columns: 1fr !important; }
+    /* ── Insight box ──────────────────────────────────────────── */
+    .insight-box {
+      border-radius: 14px;
+      background: var(--purple-xlight);
+      border: 1.5px solid var(--purple-light);
+      padding: 16px 20px;
     }
-
-    /* ── Simulator ─────────────────────────────────── */
-    .slider-group { margin-bottom: 22px; }
-    .slider-group:last-child { margin-bottom: 0; }
-    .slider-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 4px;
-    }
-    .slider-label { font-size: 13px; font-weight: 600; color: var(--charcoal); }
-    .slider-value {
-      font-size: 16px;
+    .insight-label {
+      font-size: 10px;
       font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--purple);
-      font-variant-numeric: tabular-nums;
-      min-width: 44px;
-      text-align: right;
+      margin-bottom: 5px;
     }
-    .slider-sub { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+    .insight-text {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.65;
+      color: #3D2B5A;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 1023px) {
+      .main-grid { grid-template-columns: 1fr !important; }
+      .sim-grid  { grid-template-columns: 1fr !important; }
+      .display-title { font-size: 2rem; }
+    }
+
+    /* ── Simulator ────────────────────────────────────────────── */
+    .slider-group { margin-bottom: 26px; }
+    .slider-group:last-child { margin-bottom: 0; }
+    .slider-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+    .slider-label  { font-size:14px; font-weight:700; color:var(--charcoal); }
+    .slider-value  { font-size:17px; font-weight:900; color:var(--purple); font-variant-numeric:tabular-nums; }
+    .slider-sub    { font-size:12px; font-weight:400; color:var(--muted); margin-bottom:12px; }
 
     input[type=range] {
       -webkit-appearance: none;
       width: 100%;
-      height: 5px;
-      border-radius: 3px;
+      height: 6px;
+      border-radius: 4px;
       outline: none;
       cursor: pointer;
       background: var(--purple-light);
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       background: var(--purple);
       cursor: pointer;
       border: 3px solid white;
-      box-shadow: 0 1px 6px rgba(92,47,138,0.35);
-      transition: transform 0.1s;
+      box-shadow: 0 2px 8px rgba(92,47,138,0.40);
+      transition: transform 0.1s, box-shadow 0.1s;
     }
-    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+      box-shadow: 0 3px 12px rgba(92,47,138,0.50);
+    }
     input[type=range]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       background: var(--purple);
       border: 3px solid white;
-      box-shadow: 0 1px 6px rgba(92,47,138,0.35);
+      box-shadow: 0 2px 8px rgba(92,47,138,0.40);
     }
 
-    .sim-compare-row {
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
+    .sim-compare-row { padding: 16px 0; border-bottom: 1px solid var(--border); }
     .sim-compare-row:last-of-type { border-bottom: none; padding-bottom: 0; }
     .sim-row-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 7px;
     }
-    .sim-old {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #C0B8D0;
-      text-decoration: line-through;
-      font-variant-numeric: tabular-nums;
-    }
-    .sim-arrow { font-size: 1rem; color: #C0B8D0; margin: 0 10px; }
-    .sim-new {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--purple);
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.02em;
-    }
+    .sim-old   { font-size:1.35rem; font-weight:800; color:#C8C0D4; text-decoration:line-through; font-variant-numeric:tabular-nums; }
+    .sim-arrow { font-size:1rem; color:#C8C0D4; margin:0 12px; }
+    .sim-new   { font-size:2rem; font-weight:900; color:var(--purple); font-variant-numeric:tabular-nums; letter-spacing:-0.03em; }
     .sim-delta {
-      margin-top: 18px;
-      padding: 13px 18px;
-      background: var(--yellow-light);
-      border: 1.5px solid var(--yellow);
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--charcoal);
-      text-align: center;
+      margin-top:20px; padding:15px 20px;
+      background:var(--yellow-light); border:2px solid var(--yellow);
+      border-radius:14px; font-size:15px; font-weight:800;
+      color:var(--charcoal); text-align:center; letter-spacing:-0.01em;
     }
 
-    /* ── AI Ad Generator ───────────────────────────── */
-    .ai-initial {
-      max-width: 540px;
-      margin: 0 auto;
-      text-align: center;
-      padding: 6px 0;
-    }
-    .ai-pitch {
-      font-size: 14px;
-      color: #4A4550;
-      line-height: 1.65;
-      margin-bottom: 20px;
-    }
+    /* ── AI Generator ─────────────────────────────────────────── */
+    .ai-initial { max-width:560px; margin:0 auto; text-align:center; padding:8px 0; }
+    .ai-pitch   { font-size:15px; font-weight:400; color:#5A5060; line-height:1.65; margin-bottom:22px; }
     .ai-text-input {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 14px;
-      color: var(--charcoal);
-      background: #FEFEFE;
-      margin-bottom: 12px;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      font-family: inherit;
+      width:100%; padding:12px 16px;
+      border:1.5px solid var(--border); border-radius:12px;
+      font-size:14px; font-weight:600; font-family:'Nunito Sans',sans-serif;
+      color:var(--charcoal); background:#FEFEFE; margin-bottom:14px;
+      transition:border-color 0.15s, box-shadow 0.15s, background 0.15s;
     }
     .ai-text-input:focus {
-      outline: none;
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px rgba(92,47,138,0.12);
+      outline:none; border-color:var(--purple);
+      background:var(--purple-xlight); box-shadow:0 0 0 4px rgba(92,47,138,0.10);
     }
     .ai-generate-btn {
-      width: 100%;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      color: white;
-      background: var(--purple);
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      width:100%; padding:14px 20px; border-radius:14px;
+      font-size:15px; font-weight:800; font-family:'Nunito Sans',sans-serif;
+      letter-spacing:0.01em; color:white; background:var(--purple); border:none;
+      cursor:pointer; transition:background 0.15s,transform 0.1s,box-shadow 0.15s;
+      box-shadow:0 3px 12px rgba(92,47,138,0.28);
     }
-    .ai-generate-btn:hover  { background: var(--purple-mid); }
-    .ai-generate-btn:active { transform: scale(0.98); }
-    .demo-note { font-size: 11px; color: var(--muted); margin-top: 10px; }
+    .ai-generate-btn:hover  { background:var(--purple-mid); box-shadow:0 5px 18px rgba(92,47,138,0.38); }
+    .ai-generate-btn:active { transform:scale(0.98); }
+    .demo-note { font-size:12px; font-weight:600; color:var(--muted); margin-top:12px; }
 
     .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 44px 20px;
-      gap: 16px;
+      display:flex; flex-direction:column; align-items:center;
+      padding:50px 20px; gap:18px;
     }
     .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid var(--purple-light);
-      border-top-color: var(--purple);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      width:34px; height:34px;
+      border:3px solid var(--purple-light); border-top-color:var(--purple);
+      border-radius:50%; animation:spin 0.75s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-msg {
-      font-size: 14px;
-      color: var(--muted);
-      transition: opacity 0.3s;
-    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .loading-msg { font-size:14px; font-weight:600; color:var(--muted); transition:opacity 0.3s; }
 
-    .tab-bar {
-      display: flex;
-      gap: 2px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 20px;
-    }
+    .tab-bar { display:flex; gap:2px; border-bottom:2px solid var(--border); margin-bottom:22px; }
     .tab-btn {
-      padding: 9px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      background: none;
-      border: none;
-      border-bottom: 2.5px solid transparent;
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-      margin-bottom: -1px;
-      font-family: inherit;
+      padding:10px 20px; font-size:13px; font-weight:700;
+      font-family:'Nunito Sans',sans-serif;
+      color:var(--muted); background:none; border:none;
+      border-bottom:3px solid transparent; cursor:pointer;
+      transition:color 0.15s,border-color 0.15s; margin-bottom:-2px;
     }
-    .tab-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
-    .tab-btn:hover:not(.active) { color: var(--charcoal); }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .tab-btn.active { color:var(--purple); border-bottom-color:var(--purple); }
+    .tab-btn:hover:not(.active) { color:var(--charcoal); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
 
     .ad-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 18px;
-      margin-bottom: 12px;
-      background: #FDFCFF;
+      border:1.5px solid var(--border); border-radius:14px;
+      padding:18px 20px; margin-bottom:12px; background:#FDFCFF;
+      transition:border-color 0.15s, box-shadow 0.15s;
     }
-    .ad-card:last-child { margin-bottom: 0; }
-    .ad-headline { font-size: 14px; font-weight: 700; color: var(--charcoal); margin-bottom: 6px; }
-    .ad-body { font-size: 13px; color: #4A4550; line-height: 1.55; margin-bottom: 10px; }
+    .ad-card:last-child { margin-bottom:0; }
+    .ad-card:hover { border-color:var(--purple-light); box-shadow:0 4px 16px rgba(92,47,138,0.08); }
+    .ad-headline { font-size:15px; font-weight:800; color:var(--charcoal); margin-bottom:7px; }
+    .ad-body     { font-size:13px; font-weight:400; color:#4A4058; line-height:1.6; margin-bottom:12px; }
     .ad-cta-pill {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      background: var(--purple-light);
-      color: var(--purple);
-      padding: 3px 10px;
-      border-radius: 100px;
+      display:inline-block; font-size:11px; font-weight:800;
+      background:var(--purple-light); color:var(--purple);
+      padding:4px 12px; border-radius:100px; letter-spacing:0.02em;
     }
-    .ad-hl-item { display: block; font-size: 13px; font-weight: 600; color: var(--charcoal); padding: 2px 0; }
-    .ad-desc-item { display: block; font-size: 13px; color: #4A4550; line-height: 1.5; padding: 2px 0; }
+    .ad-hl-item   { display:block; font-size:13px; font-weight:700; color:var(--charcoal); padding:2px 0; }
+    .ad-desc-item { display:block; font-size:13px; font-weight:400; color:#4A4058; line-height:1.55; padding:2px 0; }
 
     .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 12px;
-      border-radius: 100px;
-      border: 1.5px solid var(--border);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      background: transparent;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: inherit;
+      display:inline-flex; align-items:center; gap:4px;
+      padding:5px 14px; border-radius:100px; border:1.5px solid var(--border);
+      font-size:11px; font-weight:800; font-family:'Nunito Sans',sans-serif;
+      letter-spacing:0.03em; color:var(--muted); background:transparent;
+      cursor:pointer; transition:all 0.15s;
     }
-    .copy-btn:hover { background: var(--purple-xlight); border-color: var(--purple-light); color: var(--purple); }
-    .copy-btn.copied { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
+    .copy-btn:hover { background:var(--purple-xlight); border-color:var(--purple-light); color:var(--purple); }
+    .copy-btn.copied { background:#E8F5E9; border-color:#A5D6A7; color:#2E7D32; }
 
     .ip-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--purple-mid);
-      margin-bottom: 8px;
+      font-size:10px; font-weight:800; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--purple-mid); margin-bottom:8px;
     }
     .ip-text {
-      font-size: 13px;
-      color: #4A4550;
-      line-height: 1.65;
-      background: var(--purple-xlight);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 8px;
+      font-size:13px; font-weight:400; color:#4A4058; line-height:1.7;
+      background:var(--purple-xlight); border-radius:12px;
+      padding:14px 16px; margin-bottom:10px;
     }
   </style>
 </head>
 <body>
 
-<div style="max-width: 1100px; margin: 0 auto; padding: 20px 24px 32px;">
+<div style="max-width:1140px; margin:0 auto; padding:28px 28px 40px;">
 
   <!-- ═══ HEADER ═══ -->
-  <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+  <header style="margin-bottom:32px;">
+
+    <!-- Top row: logo + actions -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="177" height="29" fill="none" viewBox="0 0 177 29" style="width:160px; height:auto;"><path fill="#1A1625" d="m18.378 14.246-4.01-12.15h-2.815l-4.01 12.15-3.85-11.955-.05-.146H0l5.972 17.33.048.134h2.876l4.01-11.748 3.973 11.614.049.134h2.876l5.935-17.196.085-.268h-3.546l-3.9 12.101ZM31.235 12.309h8.494V9.213h-8.494V5.216h9.579V2.145H27.859v17.342h13.077v-3.071h-9.7v-4.107ZM49.978 2.145h-6.52v17.342h6.52c2.596 0 4.96-.89 6.642-2.498 1.658-1.585 2.572-3.778 2.572-6.167v-.049c-.012-4.996-3.876-8.628-9.214-8.628Zm5.68 8.677v.049c0 1.584-.537 2.949-1.548 3.948-1.024 1.012-2.462 1.548-4.132 1.548h-3.132V5.265h3.133c1.67 0 3.095.548 4.13 1.572 1 1 1.549 2.413 1.549 3.985ZM67.857 2.145h-6.52v17.342h6.52c2.596 0 4.96-.89 6.642-2.498 1.657-1.585 2.571-3.778 2.571-6.167v-.049c-.012-4.996-3.875-8.628-9.213-8.628Zm5.679 8.677v.049c0 1.584-.536 2.949-1.548 3.948-1.023 1.012-2.462 1.548-4.131 1.548h-3.132V5.265h3.132c1.67 0 3.095.548 4.131 1.572 1 1 1.548 2.413 1.548 3.985ZM82.627 2.145H79.24v17.342h3.388V2.145ZM97.105 13.466 88.392 2.219l-.061-.073h-3.06v17.342H88.6V7.837l8.982 11.577.06.073h2.791V2.145h-3.327v11.322ZM111.279 12.638h4.326v2.84c-1.06.767-2.449 1.182-3.887 1.182-1.621 0-3.023-.573-4.034-1.658-.987-1.048-1.524-2.547-1.524-4.192v-.049c0-3.23 2.328-5.752 5.289-5.752 2.097 0 3.315.67 4.607 1.743l.159.134 2.144-2.56-.158-.134c-1.962-1.67-3.888-2.352-6.642-2.352-2.486 0-4.765.95-6.422 2.67-1.621 1.669-2.511 3.911-2.511 6.3v.049c0 2.473.878 4.728 2.462 6.349 1.645 1.682 3.9 2.56 6.52 2.56 3.351 0 5.764-1.463 7.202-2.682l.073-.06v-7.41h-7.616v3.022h.012ZM176.174 3.132l.244-.183-1.779-2.425-.244.183c-5.411 3.985-14.113 1.255-14.612 1.097l-2.596-1.06-4.351 10.431c-.524 1.22-1.243 2.145-1.657 2.413-.354.22-.646.293-.878.195-.329-.134-.512-.609-.548-.767-.183-.744-.171-1.89.049-3.632.255-2.035.926-4.655.938-4.68l.037-.158-1.548-1.78-.159.025c-.926.134-1.681.012-2.218-.366-.828-.585-1.011-2.108-1.011-2.12L145.804 0l-3.132.292-.024.244c-.366 3.242-1.292 7.873-5.033 11.675.414-1.377.597-2.851.536-4.338-.085-1.901-.768-3.571-1.926-4.704-.999-.975-2.242-1.463-3.583-1.402-1.584.073-3.254.938-4.448 2.316-.816.95-1.548 2.096-2.218 3.497-.597-3.449-1.596-5.009-2.169-5.642l-.207-.232-2.011 1.816-.232.207.207.232c.342.426 2.133 4.606 1.707 12.857l-.5 11.882h3.022l.439-9.08c1.097 0 3.583-.12 5.094-.51.561-.123 3.388-.793 6.386-3.048 2.486-1.864 5.728-5.325 7.227-11.321a5.247 5.247 0 0 0 2.401 1.011 28.939 28.939 0 0 0-.646 4.46 15.615 15.615 0 0 0 .061 2.962c.097.792.292 1.438.597 1.962a3.127 3.127 0 0 0 1.377 1.292c1.158.548 2.462.439 3.681-.33.109-.06 1.096-.657 1.889-2.01.121.646.304 1.268.536 1.84.804 2.023 2.388 3.522 4.338 4.083a5.998 5.998 0 0 0 1.658.244c1.182 0 2.303-.366 3.339-1.097 1.158-.805 2.035-1.987 2.559-3.425 1.121-3.12.439-6.946-1.73-9.956 1.901.219 7.263.316 11.175-2.645Zm-12.309 11.663a3.799 3.799 0 0 1-1.438 1.962c-.768.536-1.56.682-2.425.427-1.036-.305-1.926-1.17-2.389-2.316l-.012-.024c0-.012-.439-.89-.512-2.608-.061-1.56.171-4.12 1.609-7.617.646.268 2.352 1.084 3.534 2.608 2.389 3.095 2.206 5.825 1.633 7.568Zm-32.502 1.024c-1.377.78-2.998 1.072-4.802.865.244-1.974.536-3.656 1.097-5.301 1.267-3.693 2.779-5.29 2.791-5.302l.012-.012c.658-.755 1.535-1.243 2.303-1.28.512-.024.951.159 1.353.549.817.792.987 2.01 1.024 2.669.146 3.376-1.341 6.434-3.778 7.812Z"/></svg>
+      <div style="display:flex; gap:10px; flex-shrink:0;">
+        <button class="btn-ghost" onclick="resetToDefaults()">Reset to example</button>
+        <button class="btn-primary" id="share-btn" onclick="shareResults()">Share results</button>
+      </div>
+    </div>
+
+    <!-- Hero title -->
     <div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="177" height="29" fill="none" viewBox="0 0 177 29" style="display:block; width:180px; height:auto; margin-bottom:6px;"><path fill="#1C1C1C" d="m18.378 14.246-4.01-12.15h-2.815l-4.01 12.15-3.85-11.955-.05-.146H0l5.972 17.33.048.134h2.876l4.01-11.748 3.973 11.614.049.134h2.876l5.935-17.196.085-.268h-3.546l-3.9 12.101ZM31.235 12.309h8.494V9.213h-8.494V5.216h9.579V2.145H27.859v17.342h13.077v-3.071h-9.7v-4.107ZM49.978 2.145h-6.52v17.342h6.52c2.596 0 4.96-.89 6.642-2.498 1.658-1.585 2.572-3.778 2.572-6.167v-.049c-.012-4.996-3.876-8.628-9.214-8.628Zm5.68 8.677v.049c0 1.584-.537 2.949-1.548 3.948-1.024 1.012-2.462 1.548-4.132 1.548h-3.132V5.265h3.133c1.67 0 3.095.548 4.13 1.572 1 1 1.549 2.413 1.549 3.985ZM67.857 2.145h-6.52v17.342h6.52c2.596 0 4.96-.89 6.642-2.498 1.657-1.585 2.571-3.778 2.571-6.167v-.049c-.012-4.996-3.875-8.628-9.213-8.628Zm5.679 8.677v.049c0 1.584-.536 2.949-1.548 3.948-1.023 1.012-2.462 1.548-4.131 1.548h-3.132V5.265h3.132c1.67 0 3.095.548 4.131 1.572 1 1 1.548 2.413 1.548 3.985ZM82.627 2.145H79.24v17.342h3.388V2.145ZM97.105 13.466 88.392 2.219l-.061-.073h-3.06v17.342H88.6V7.837l8.982 11.577.06.073h2.791V2.145h-3.327v11.322ZM111.279 12.638h4.326v2.84c-1.06.767-2.449 1.182-3.887 1.182-1.621 0-3.023-.573-4.034-1.658-.987-1.048-1.524-2.547-1.524-4.192v-.049c0-3.23 2.328-5.752 5.289-5.752 2.097 0 3.315.67 4.607 1.743l.159.134 2.144-2.56-.158-.134c-1.962-1.67-3.888-2.352-6.642-2.352-2.486 0-4.765.95-6.422 2.67-1.621 1.669-2.511 3.911-2.511 6.3v.049c0 2.473.878 4.728 2.462 6.349 1.645 1.682 3.9 2.56 6.52 2.56 3.351 0 5.764-1.463 7.202-2.682l.073-.06v-7.41h-7.616v3.022h.012ZM176.174 3.132l.244-.183-1.779-2.425-.244.183c-5.411 3.985-14.113 1.255-14.612 1.097l-2.596-1.06-4.351 10.431c-.524 1.22-1.243 2.145-1.657 2.413-.354.22-.646.293-.878.195-.329-.134-.512-.609-.548-.767-.183-.744-.171-1.89.049-3.632.255-2.035.926-4.655.938-4.68l.037-.158-1.548-1.78-.159.025c-.926.134-1.681.012-2.218-.366-.828-.585-1.011-2.108-1.011-2.12L145.804 0l-3.132.292-.024.244c-.366 3.242-1.292 7.873-5.033 11.675.414-1.377.597-2.851.536-4.338-.085-1.901-.768-3.571-1.926-4.704-.999-.975-2.242-1.463-3.583-1.402-1.584.073-3.254.938-4.448 2.316-.816.95-1.548 2.096-2.218 3.497-.597-3.449-1.596-5.009-2.169-5.642l-.207-.232-2.011 1.816-.232.207.207.232c.342.426 2.133 4.606 1.707 12.857l-.5 11.882h3.022l.439-9.08c1.097 0 3.583-.12 5.094-.51.561-.123 3.388-.793 6.386-3.048 2.486-1.864 5.728-5.325 7.227-11.321a5.247 5.247 0 0 0 2.401 1.011 28.939 28.939 0 0 0-.646 4.46 15.615 15.615 0 0 0 .061 2.962c.097.792.292 1.438.597 1.962a3.127 3.127 0 0 0 1.377 1.292c1.158.548 2.462.439 3.681-.33.109-.06 1.096-.657 1.889-2.01.121.646.304 1.268.536 1.84.804 2.023 2.388 3.522 4.338 4.083a5.998 5.998 0 0 0 1.658.244c1.182 0 2.303-.366 3.339-1.097 1.158-.805 2.035-1.987 2.559-3.425 1.121-3.12.439-6.946-1.73-9.956 1.901.219 7.263.316 11.175-2.645Zm-12.309 11.663a3.799 3.799 0 0 1-1.438 1.962c-.768.536-1.56.682-2.425.427-1.036-.305-1.926-1.17-2.389-2.316l-.012-.024c0-.012-.439-.89-.512-2.608-.061-1.56.171-4.12 1.609-7.617.646.268 2.352 1.084 3.534 2.608 2.389 3.095 2.206 5.825 1.633 7.568Zm-32.502 1.024c-1.377.78-2.998 1.072-4.802.865.244-1.974.536-3.656 1.097-5.301 1.267-3.693 2.779-5.29 2.791-5.302l.012-.012c.658-.755 1.535-1.243 2.303-1.28.512-.024.951.159 1.353.549.817.792.987 2.01 1.024 2.669.146 3.376-1.341 6.434-3.778 7.812Z"/></svg>
-      <p style="font-size:12px; color:var(--muted); margin:0; letter-spacing:0.01em;">The ROI Roadmap · Calculate your true cost per booking</p>
+      <div class="section-eyebrow">For wedding vendors</div>
+      <h1 class="display-title">The ROI Roadmap</h1>
+      <p class="display-sub">Calculate your true cost per booking — and find out exactly where your money is going.</p>
     </div>
-    <div style="display:flex; gap:8px; flex-shrink:0;">
-      <button class="btn-ghost" onclick="resetToDefaults()">Reset to example</button>
-      <button class="btn-primary" id="share-btn" onclick="shareResults()">Share results</button>
-    </div>
+
   </header>
 
-  <!-- ═══ MAIN GRID: Inputs + Metrics ═══ -->
-  <div class="main-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+  <!-- ═══ GRID: Inputs + Metrics ═══ -->
+  <div class="main-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
 
     <!-- SECTION 1: Inputs -->
-    <div class="card" style="padding:24px 26px;">
+    <div class="card" style="padding:28px 30px;">
+      <div class="section-eyebrow">Step 1</div>
       <div class="section-title">What are you actually spending?</div>
       <div class="section-sub">Monthly figures — estimates are fine</div>
 
-      <div style="margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="margin-top:22px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
         <div>
           <label>Paid Ads Spend</label>
-          <div style="position:relative;">
+          <div class="input-wrap">
             <span class="input-prefix">$</span>
             <input id="inp-ads" class="input-field has-prefix" type="number" min="0" value="200">
           </div>
         </div>
         <div>
           <label>Platform Subscriptions</label>
-          <div style="position:relative;">
+          <div class="input-wrap">
             <span class="input-prefix">$</span>
-            <input id="inp-platform" class="input-field has-prefix" type="number" min="0" value="400" placeholder="e.g. WeddingPro">
+            <input id="inp-platform" class="input-field has-prefix" type="number" min="0" value="400" placeholder="WeddingPro">
           </div>
         </div>
       </div>
 
-      <div style="margin-top:12px;">
+      <div style="margin-top:14px;">
         <label>Content Creation Costs</label>
-        <div style="position:relative;">
+        <div class="input-wrap">
           <span class="input-prefix">$</span>
           <input id="inp-content" class="input-field has-prefix" type="number" min="0" value="250">
         </div>
       </div>
 
-      <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
         <div>
           <label>Hours/month on Inquiries</label>
           <input id="inp-hours" class="input-field" type="number" min="0" value="10">
         </div>
         <div>
           <label>Your Hourly Rate</label>
-          <div style="position:relative;">
+          <div class="input-wrap">
             <span class="input-prefix">$</span>
             <input id="inp-hourly" class="input-field has-prefix" type="number" min="0" value="25">
           </div>
@@ -500,17 +479,16 @@
       </div>
 
       <hr class="divider">
+      <div style="font-size:11px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:14px;">Your results last month</div>
 
-      <div style="font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">And your results last month</div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
         <div>
           <label>Number of Bookings</label>
           <input id="inp-bookings" class="input-field" type="number" min="1" value="10">
         </div>
         <div>
           <label>Avg Booking Value</label>
-          <div style="position:relative;">
+          <div class="input-wrap">
             <span class="input-prefix">$</span>
             <input id="inp-value" class="input-field has-prefix" type="number" min="0" value="1500">
           </div>
@@ -519,46 +497,50 @@
     </div>
 
     <!-- SECTION 2: Metric Cards -->
-    <div style="display:flex; flex-direction:column; gap:12px;">
-      <div class="section-title" style="padding-bottom:2px;">Here's your reality check</div>
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <div>
+        <div class="section-eyebrow">Step 2</div>
+        <div class="section-title" style="margin-bottom:2px;">Here's your reality check</div>
+      </div>
 
-      <div class="card" style="padding:18px 22px; flex:1;">
+      <div class="metric-card card-accent">
         <div class="metric-label">Your CAC</div>
-        <div id="cac-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">$110</div>
+        <div id="cac-num" class="big-num" style="font-size:3rem; color:var(--charcoal);">$110</div>
         <div class="metric-caption">That's what each new couple costs you</div>
       </div>
 
-      <div class="card" style="padding:18px 22px; flex:1;">
+      <div class="metric-card">
         <div class="metric-label">Your ROI Ratio</div>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div id="roi-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">13.6x</div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div id="roi-num" class="big-num" style="font-size:3rem; color:var(--charcoal);">13.6x</div>
           <span id="roi-badge" class="badge badge-green">Strong — room to scale</span>
         </div>
         <div class="metric-caption">Avg booking value ÷ cost to acquire</div>
       </div>
 
-      <div class="card" style="padding:18px 22px; flex:1;">
+      <div class="metric-card">
         <div class="metric-label">Profit per Booking</div>
-        <div id="profit-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">$1,390</div>
+        <div id="profit-num" class="big-num" style="font-size:3rem; color:var(--charcoal);">$1,390</div>
         <div class="metric-caption">What you keep per wedding booked</div>
       </div>
     </div>
 
   </div>
 
-  <!-- SECTION 3: Bar Chart + Insight -->
-  <div class="card" style="padding:22px 26px; margin-bottom:16px;">
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px;">
+  <!-- SECTION 3: Bar Chart -->
+  <div class="card" style="padding:28px 30px; margin-bottom:20px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; gap:12px; flex-wrap:wrap;">
       <div>
+        <div class="section-eyebrow">Step 3</div>
         <div class="section-title">Where your money is going</div>
-        <div class="section-sub">As % of total monthly spend (time counted as real money)</div>
+        <div class="section-sub">As % of total monthly spend — time counted as real money</div>
       </div>
-      <div id="total-pill" style="font-size:12px; font-weight:700; background:var(--purple-light); color:var(--purple); padding:5px 12px; border-radius:100px; white-space:nowrap;">
+      <div id="total-pill" style="font-size:13px; font-weight:800; background:var(--purple-light); color:var(--purple); padding:7px 16px; border-radius:100px; white-space:nowrap; align-self:center;">
         Total: $1,100/mo
       </div>
     </div>
 
-    <div id="bar-chart" style="display:flex; flex-direction:column; gap:9px; margin-bottom:16px;"></div>
+    <div id="bar-chart" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;"></div>
 
     <div class="insight-box">
       <div class="insight-label">Insight</div>
@@ -567,13 +549,14 @@
   </div>
 
   <!-- ═══ FEATURE 1: Before/After Simulator ═══ -->
-  <div class="card" style="padding:24px 26px; margin-bottom:16px;">
-    <div style="margin-bottom:22px;">
+  <div class="card" style="padding:28px 30px; margin-bottom:20px;">
+    <div style="margin-bottom:26px;">
+      <div class="section-eyebrow">Optimizer</div>
       <div class="section-title">What if you optimized?</div>
       <div class="section-sub">Drag the sliders. Watch your numbers move.</div>
     </div>
 
-    <div class="sim-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start;">
+    <div class="sim-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;">
 
       <!-- LEFT: Sliders -->
       <div>
@@ -585,7 +568,6 @@
           <div class="slider-sub">Convert X% more of your current inquiries into bookings</div>
           <input type="range" id="sl-conv" min="0" max="50" step="5" value="0">
         </div>
-
         <div class="slider-group">
           <div class="slider-header">
             <span class="slider-label">Time efficiency</span>
@@ -594,7 +576,6 @@
           <div class="slider-sub">Cut time spent on unqualified leads by X%</div>
           <input type="range" id="sl-time" min="0" max="75" step="5" value="0">
         </div>
-
         <div class="slider-group">
           <div class="slider-header">
             <span class="slider-label">Price increase</span>
@@ -615,7 +596,6 @@
             <span id="sim-cac-new" class="sim-new">$110</span>
           </div>
         </div>
-
         <div class="sim-compare-row">
           <div class="sim-row-label">ROI Ratio</div>
           <div style="display:flex; align-items:center;">
@@ -624,7 +604,6 @@
             <span id="sim-roi-new" class="sim-new">13.6x</span>
           </div>
         </div>
-
         <div class="sim-compare-row">
           <div class="sim-row-label">Monthly Profit</div>
           <div style="display:flex; align-items:center;">
@@ -633,7 +612,6 @@
             <span id="sim-profit-new" class="sim-new">$13,900</span>
           </div>
         </div>
-
         <div id="sim-delta" class="sim-delta" style="display:none;"></div>
       </div>
 
@@ -641,13 +619,13 @@
   </div>
 
   <!-- ═══ FEATURE 2: AI Ad Generator ═══ -->
-  <div class="card" style="padding:24px 26px; margin-bottom:16px;">
-    <div style="margin-bottom:22px;">
+  <div class="card" style="padding:28px 30px; margin-bottom:20px;">
+    <div style="margin-bottom:24px;">
+      <div class="section-eyebrow">AI-Powered</div>
       <div class="section-title">Generate ads built for your numbers</div>
       <div class="section-sub">Based on your CAC, booking value, and market position, here's what we'd run.</div>
     </div>
 
-    <!-- Initial -->
     <div id="ai-initial">
       <div class="ai-initial">
         <p class="ai-pitch">We'll write 3 Meta ad variants, 3 Google search ads, and a hero image prompt — tailored to your exact situation.</p>
@@ -657,7 +635,6 @@
       </div>
     </div>
 
-    <!-- Loading -->
     <div id="ai-loading" style="display:none;">
       <div class="loading-state">
         <div class="spinner"></div>
@@ -665,7 +642,6 @@
       </div>
     </div>
 
-    <!-- Results -->
     <div id="ai-results" style="display:none;">
       <div class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('meta')">Meta Ads</button>
@@ -675,20 +651,19 @@
       <div id="tab-meta"   class="tab-panel active"></div>
       <div id="tab-google" class="tab-panel"></div>
       <div id="tab-image"  class="tab-panel"></div>
-      <div style="text-align:center; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+      <div style="text-align:center; margin-top:24px; padding-top:18px; border-top:1px solid var(--border);">
         <button class="btn-ghost" onclick="resetAds()">← Generate new ads</button>
       </div>
     </div>
 
-    <!-- Error -->
-    <div id="ai-error" style="display:none; text-align:center; padding:36px 20px;">
-      <p style="color:var(--muted); font-size:14px; margin-bottom:14px;">Couldn't generate ads — try again</p>
+    <div id="ai-error" style="display:none; text-align:center; padding:40px 20px;">
+      <p style="color:var(--muted); font-size:14px; font-weight:600; margin-bottom:16px;">Couldn't generate ads — try again</p>
       <button class="btn-ghost" onclick="resetAds()">Retry</button>
     </div>
   </div>
 
-  <footer style="text-align:center; margin-top:8px;">
-    <span style="font-size:11px; color:#C0B8D0;">Built for Photoroom · Internal demo</span>
+  <footer style="text-align:center; padding-top:8px;">
+    <span style="font-size:12px; font-weight:600; color:#C8C0D4;">Built for Photoroom · Internal demo</span>
   </footer>
 
 </div>
@@ -708,12 +683,12 @@
   ];
 
   // ─── Animation ───────────────────────────────────────────────────
-  const prev = { cac:110, roi:13.6, profit:1390 };
+  const prev    = { cac:110, roi:13.6, profit:1390 };
   const simPrev = { cac:110, roi:13.6, profit:13900 };
 
   function animCount(el, from, to, fmt) {
     if (el._raf) cancelAnimationFrame(el._raf);
-    const duration = 250;
+    const duration = 260;
     const t0 = performance.now();
     function step(now) {
       const t = Math.min((now - t0) / duration, 1);
@@ -745,7 +720,7 @@
   }
 
   function compute() {
-    const v = getValues();
+    const v        = getValues();
     const timeCost = v.hours * v.hourly;
     const total    = v.ads + v.platform + v.content + timeCost;
     const cac      = total / v.bookings;
@@ -789,24 +764,23 @@
 
   // ─── Bar chart ───────────────────────────────────────────────────
   function renderBars(v, total, timeCost) {
-    const amounts = { ads: v.ads, platform: v.platform, content: v.content, time: timeCost };
+    const amounts = { ads:v.ads, platform:v.platform, content:v.content, time:timeCost };
     const chart   = document.getElementById('bar-chart');
 
     BAR_DEFS.forEach((def, i) => {
       const amount = amounts[def.key] || 0;
       const pct    = total > 0 ? (amount / total * 100) : 0;
-
       let row = chart.querySelector(`[data-bar="${i}"]`);
       if (!row) {
         row = document.createElement('div');
         row.setAttribute('data-bar', i);
-        row.style.cssText = 'display:flex; align-items:center; gap:10px;';
+        row.style.cssText = 'display:flex; align-items:center; gap:12px;';
         row.innerHTML = `
-          <div style="width:190px; flex-shrink:0; font-size:12px; color:var(--charcoal); font-weight:500;">${def.label}</div>
-          <div class="bar-track"><div class="bar-fill" style="width:0%; background:${def.color};"></div></div>
-          <div style="width:110px; flex-shrink:0; text-align:right; font-size:12px;">
-            <span class="bar-pct" style="font-weight:700; color:var(--charcoal);"></span>
-            <span class="bar-dollar" style="color:var(--muted);"></span>
+          <div style="width:200px;flex-shrink:0;font-size:13px;font-weight:700;color:var(--charcoal);">${def.label}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:${def.color};"></div></div>
+          <div style="width:116px;flex-shrink:0;text-align:right;font-size:13px;">
+            <span class="bar-pct" style="font-weight:800;color:var(--charcoal);"></span>
+            <span class="bar-dollar" style="font-weight:400;color:var(--muted);"></span>
           </div>`;
         chart.appendChild(row);
       }
@@ -841,12 +815,10 @@
       const el = document.getElementById('inp-' + key);
       if (el) el.value = val;
     });
-    // Reset sliders
     ['sl-conv','sl-time','sl-price'].forEach(id => {
       document.getElementById(id).value = 0;
     });
     updateAllSliderTracks();
-    // Clear ads
     resetAds();
     compute();
   }
@@ -873,14 +845,11 @@
     }).catch(() => { prompt('Copy this summary:', text); });
   }
 
-  // ─── Wire up main inputs ─────────────────────────────────────────
   ['ads','platform','content','hours','hourly','bookings','value'].forEach(id => {
     document.getElementById('inp-' + id).addEventListener('input', compute);
   });
 
-  // ═══════════════════════════════════════════════════════════════
-  // FEATURE 1 — Before/After Simulator
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ SIMULATOR ═══════════════════════════════════════════════════
 
   function updateSliderTrack(id, value, max) {
     const pct = Math.round((value / max) * 100);
@@ -895,26 +864,23 @@
   }
 
   function computeSim() {
-    const v = getValues();
+    const v        = getValues();
     const timeCost = v.hours * v.hourly;
     const total    = v.ads + v.platform + v.content + timeCost;
 
-    const convLift  = parseFloat(document.getElementById('sl-conv').value)  / 100;
-    const timeEff   = parseFloat(document.getElementById('sl-time').value)  / 100;
-    const priceInc  = parseFloat(document.getElementById('sl-price').value) / 100;
+    const convLift = parseFloat(document.getElementById('sl-conv').value)  / 100;
+    const timeEff  = parseFloat(document.getElementById('sl-time').value)  / 100;
+    const priceInc = parseFloat(document.getElementById('sl-price').value) / 100;
 
     document.getElementById('sl-conv-val').textContent  = Math.round(convLift  * 100) + '%';
     document.getElementById('sl-time-val').textContent  = Math.round(timeEff   * 100) + '%';
     document.getElementById('sl-price-val').textContent = Math.round(priceInc  * 100) + '%';
-
     updateAllSliderTracks();
 
-    // Before
     const oldCAC    = v.bookings > 0 ? total / v.bookings : 0;
     const oldROI    = oldCAC > 0 ? v.value / oldCAC : 0;
     const oldProfit = v.bookings * v.value - total;
 
-    // After
     const newBookings = v.bookings * (1 + convLift);
     const newTimeCost = timeCost   * (1 - timeEff);
     const newTotal    = v.ads + v.platform + v.content + newTimeCost;
@@ -923,12 +889,10 @@
     const newROI      = newCAC > 0 ? newAvgValue / newCAC : 0;
     const newProfit   = newBookings * newAvgValue - newTotal;
 
-    // Update "before" (static, no animation needed)
     document.getElementById('sim-cac-old').textContent    = fmtDollar(oldCAC);
     document.getElementById('sim-roi-old').textContent    = fmtRatio(oldROI);
     document.getElementById('sim-profit-old').textContent = fmtDollar(oldProfit);
 
-    // Animate "after"
     animCount(document.getElementById('sim-cac-new'),    simPrev.cac,    newCAC,    fmtDollar);
     animCount(document.getElementById('sim-roi-new'),    simPrev.roi,    newROI,    fmtRatio);
     animCount(document.getElementById('sim-profit-new'), simPrev.profit, newProfit, fmtDollar);
@@ -937,7 +901,6 @@
     simPrev.roi    = newROI;
     simPrev.profit = newProfit;
 
-    // Delta callout
     const delta   = newProfit - oldProfit;
     const deltaEl = document.getElementById('sim-delta');
     if (delta > 1) {
@@ -952,9 +915,7 @@
     document.getElementById(id).addEventListener('input', computeSim);
   });
 
-  // ═══════════════════════════════════════════════════════════════
-  // FEATURE 2 — AI Ad Generator
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ AI AD GENERATOR ═════════════════════════════════════════════
 
   let currentAds      = null;
   let loadingInterval = null;
@@ -981,27 +942,20 @@
   async function generateAds() {
     const descEl = document.getElementById('ai-couple-desc');
     const desc   = descEl.value.trim();
-
     if (!desc) {
       descEl.focus();
       descEl.style.borderColor = '#C62828';
       setTimeout(() => { descEl.style.borderColor = ''; }, 1500);
       return;
     }
-
     setAiState('loading');
-
-    // Rotate loading messages
     let msgIdx = 0;
     const msgEl = document.getElementById('loading-msg');
     msgEl.textContent = LOADING_MSGS[0];
     loadingInterval = setInterval(() => {
       msgIdx = (msgIdx + 1) % LOADING_MSGS.length;
       msgEl.style.opacity = '0';
-      setTimeout(() => {
-        msgEl.textContent  = LOADING_MSGS[msgIdx];
-        msgEl.style.opacity = '1';
-      }, 300);
+      setTimeout(() => { msgEl.textContent = LOADING_MSGS[msgIdx]; msgEl.style.opacity = '1'; }, 300);
     }, 1800);
 
     const v        = getValues();
@@ -1011,7 +965,6 @@
     const roi      = cac > 0 ? v.value / cac : 0;
 
     let adData;
-
     if (ANTHROPIC_API_KEY) {
       adData = await fetchAdsFromAPI(cac, v.value, roi, v.bookings, desc);
     } else {
@@ -1021,11 +974,7 @@
     }
 
     clearInterval(loadingInterval);
-
-    if (!adData) {
-      setAiState('error');
-      return;
-    }
+    if (!adData) { setAiState('error'); return; }
 
     currentAds = adData;
     renderAdResults(adData);
@@ -1053,9 +1002,7 @@
       let raw = data.content[0].text.trim();
       raw = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '');
       return JSON.parse(raw);
-    } catch {
-      return null;
-    }
+    } catch { return null; }
   }
 
   function buildPrompt(cac, avgValue, roi, bookings, desc) {
@@ -1095,49 +1042,18 @@ Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 c
 
   function getFallbackAds(cac, avgValue, roi, bookings, desc) {
     const val  = Math.round(avgValue).toLocaleString();
-    const bk   = Math.round(bookings);
     const yr   = Math.round(bookings * 12);
     const slug = desc.split(',')[0];
     return {
       meta_ads: [
-        {
-          headline: "Your wedding, done right",
-          primary_text: `Couples who book with us spend an average of $${val} on a day they talk about forever. Limited dates available this season.`,
-          cta: "Book Now"
-        },
-        {
-          headline: `Only ${bk} couples per month`,
-          primary_text: `Because your wedding isn't a number. See our work, meet our team, and decide if we're the right fit — no pressure, no hard sell.`,
-          cta: "Learn More"
-        },
-        {
-          headline: "Real weddings. Real results.",
-          primary_text: `Over ${yr}+ couples trusted us last year. Here's what they said — and what their day actually looked like.`,
-          cta: "See Our Work"
-        }
+        { headline: "Your wedding, done right", primary_text: `Couples who book with us invest an average of $${val} on a day they talk about forever. Limited dates available this season.`, cta: "Book Now" },
+        { headline: `Only ${Math.round(bookings)} couples per month`, primary_text: `Because your wedding isn't a number. See our work, meet our team, and decide if we're the right fit — no pressure, no hard sell.`, cta: "Learn More" },
+        { headline: "Real weddings. Real results.", primary_text: `Over ${yr}+ couples trusted us last year. Here's what they said — and what their day actually looked like.`, cta: "See Our Work" }
       ],
       google_ads: [
-        {
-          headlines: ["Wedding Vendor You'll Love", "Trusted by Local Couples", `From $${val} Per Event`],
-          descriptions: [
-            "Personalized service for your wedding day. View availability and book a free consultation today.",
-            "Real reviews from real couples. See why we're the top-rated choice in your area."
-          ]
-        },
-        {
-          headlines: ["Limited Dates This Season", "Book Before They're Gone", "Award-Winning Wedding Team"],
-          descriptions: [
-            "We take a limited number of couples per season so every event gets our full attention.",
-            `Starting at $${val}. Request a custom quote based on your vision and budget.`
-          ]
-        },
-        {
-          headlines: ["Your Day, Your Vision", "Expert Wedding Planning", "Free Consultation Today"],
-          descriptions: [
-            "We listen before we plan. Tell us about your ideal day and we'll show you how to make it real.",
-            "No cookie-cutter packages. Every wedding we do is built around what matters most to you."
-          ]
-        }
+        { headlines: ["Wedding Vendor You'll Love", "Trusted by Local Couples", `From $${val} Per Event`], descriptions: ["Personalized service for your wedding day. View availability and book a free consultation today.", "Real reviews from real couples. See why we're the top-rated choice in your area."] },
+        { headlines: ["Limited Dates This Season", "Book Before They're Gone", "Award-Winning Wedding Team"], descriptions: [`We take only ${Math.round(bookings)} couples per season so every event gets our full attention.`, `Starting at $${val}. Request a custom quote based on your vision and budget.`] },
+        { headlines: ["Your Day, Your Vision", "Expert Wedding Planning", "Free Consultation Today"], descriptions: ["We listen before we plan. Tell us about your ideal day and we'll show you how to make it real.", "No cookie-cutter packages. Every wedding we do is built around what matters most to you."] }
       ],
       image_prompt_detailed: `A photorealistic wedding scene: ${desc}. Golden hour lighting, soft bokeh background, editorial style photography. Bride and groom in a genuine emotional moment, not posed. Shot on medium format camera, warm tones, film-inspired color grading. Clean negative space in upper third for text overlay. Aspect ratio 4:5 for Instagram feed. Hyper-detailed, high resolution.`,
       image_prompt_social: `Elegant wedding couple, golden hour light, editorial photography, warm film tones. ${slug}. Minimal, space for text overlay at top. 4:5 ratio.`
@@ -1145,34 +1061,25 @@ Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 c
   }
 
   function renderAdResults(data) {
-    // Meta Ads
     document.getElementById('tab-meta').innerHTML = data.meta_ads.map((ad, i) => `
       <div class="ad-card">
         <div class="ad-headline">${escHtml(ad.headline)}</div>
         <div class="ad-body">${escHtml(ad.primary_text)}</div>
-        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
           <span class="ad-cta-pill">${escHtml(ad.cta)}</span>
           <button class="copy-btn" onclick="copyAdText('meta',${i},this)">Copy</button>
         </div>
       </div>`).join('');
 
-    // Google Ads
     document.getElementById('tab-google').innerHTML = data.google_ads.map((ad, i) => `
       <div class="ad-card">
-        <div class="ad-headlines-list" style="margin-bottom:8px;">
-          ${ad.headlines.map(h => `<span class="ad-hl-item">${escHtml(h)}</span>`).join('')}
-        </div>
-        <div style="margin-bottom:10px;">
-          ${ad.descriptions.map(d => `<span class="ad-desc-item">${escHtml(d)}</span>`).join('')}
-        </div>
-        <div style="text-align:right;">
-          <button class="copy-btn" onclick="copyAdText('google',${i},this)">Copy all</button>
-        </div>
+        <div style="margin-bottom:10px;">${ad.headlines.map(h => `<span class="ad-hl-item">${escHtml(h)}</span>`).join('')}</div>
+        <div style="margin-bottom:12px;">${ad.descriptions.map(d => `<span class="ad-desc-item">${escHtml(d)}</span>`).join('')}</div>
+        <div style="text-align:right;"><button class="copy-btn" onclick="copyAdText('google',${i},this)">Copy all</button></div>
       </div>`).join('');
 
-    // Image Prompts
     document.getElementById('tab-image').innerHTML = `
-      <div style="margin-bottom:16px;">
+      <div style="margin-bottom:20px;">
         <div class="ip-label">Detailed Prompt — Midjourney / DALL·E / Photoroom</div>
         <div class="ip-text">${escHtml(data.image_prompt_detailed)}</div>
         <button class="copy-btn" onclick="copyAdText('image',0,this)">Copy prompt</button>
@@ -1185,9 +1092,7 @@ Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 c
   }
 
   function escHtml(str) {
-    return String(str)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function copyAdText(type, index, btn) {
@@ -1199,7 +1104,7 @@ Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 c
     } else if (type === 'google') {
       const ad = currentAds.google_ads[index];
       text = `Headlines:\n${ad.headlines.join('\n')}\n\nDescriptions:\n${ad.descriptions.join('\n')}`;
-    } else if (type === 'image') {
+    } else {
       text = index === 0 ? currentAds.image_prompt_detailed : currentAds.image_prompt_social;
     }
     const orig = btn.textContent;
@@ -1212,12 +1117,8 @@ Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 c
 
   function switchTab(tab) {
     const tabs = ['meta','google','image'];
-    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-      btn.classList.toggle('active', tabs[i] === tab);
-    });
-    document.querySelectorAll('.tab-panel').forEach(panel => {
-      panel.classList.toggle('active', panel.id === 'tab-' + tab);
-    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => btn.classList.toggle('active', tabs[i] === tab));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
   }
 
   // ─── Boot ────────────────────────────────────────────────────────
