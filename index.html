@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The ROI Roadmap — Wedding Vendor Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --purple:       #5C2F8A;
+      --purple-mid:   #7A4AAD;
+      --purple-light: #EFE6F8;
+      --purple-xlight:#F7F2FC;
+      --yellow:       #F5C844;
+      --yellow-light: #FEF7DC;
+      --cream:        #FDF1EB;
+      --charcoal:     #1C1C1C;
+      --muted:        #8A8490;
+      --border:       #EDE8E6;
+      --dark-btn:     #1C1C1C;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--charcoal);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Remove number input spinners */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    .big-num {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 2px rgba(44,40,37,0.04), 0 4px 16px rgba(44,40,37,0.04);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--charcoal);
+      background: #FEFEFE;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(92,47,138,0.12);
+    }
+    .input-prefix {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .has-prefix { padding-left: 24px !important; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--charcoal);
+    }
+    .section-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .metric-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple-mid);
+      margin-bottom: 6px;
+    }
+
+    .metric-caption {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--purple-xlight);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-green  { background: #E8F5E9; color: #2E7D32; }
+    .badge-yellow { background: #FFF8E1; color: #B45309; }
+    .badge-red    { background: #FEECEB; color: #C62828; }
+
+    .insight-box {
+      border-radius: 12px;
+      background: var(--purple-xlight);
+      border: 1px solid var(--purple-light);
+      padding: 14px 18px;
+    }
+    .insight-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 4px;
+    }
+    .insight-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #3D2B5A;
+    }
+
+    .btn-ghost {
+      padding: 7px 16px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-ghost:hover { background: var(--purple-xlight); }
+
+    .btn-primary {
+      padding: 7px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      background: var(--purple);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover  { background: var(--purple-mid); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    /* Responsive: stack on mobile */
+    @media (max-width: 1023px) {
+      .main-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div style="max-width: 1100px; margin: 0 auto; padding: 20px 24px 24px;">
+
+  <!-- ═══ HEADER ═══ -->
+  <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+    <div>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:3px;">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="11" fill="#5C2F8A" opacity="0.12"/>
+          <path d="M6 14.5 L9.5 10 L12.5 12.5 L16 7.5" stroke="#5C2F8A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1 style="font-size:22px; font-weight:800; letter-spacing:-0.03em; color:var(--charcoal); margin:0;">The ROI Roadmap</h1>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin:0;">Calculate your true cost per booking · wedding vendors</p>
+    </div>
+    <div style="display:flex; gap:8px; flex-shrink:0;">
+      <button class="btn-ghost" onclick="resetToDefaults()">Reset to example</button>
+      <button class="btn-primary" id="share-btn" onclick="shareResults()">Share results</button>
+    </div>
+  </header>
+
+  <!-- ═══ MAIN GRID: Inputs (left) + Metrics (right) ═══ -->
+  <div class="main-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+
+    <!-- ── SECTION 1: Inputs ── -->
+    <div class="card" style="padding:24px 26px;">
+      <div class="section-title">What are you actually spending?</div>
+      <div class="section-sub">Monthly figures — estimates are fine</div>
+
+      <div style="margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div>
+          <label>Paid Ads Spend</label>
+          <div style="position:relative;">
+            <span class="input-prefix">$</span>
+            <input id="inp-ads" class="input-field has-prefix" type="number" min="0" value="200">
+          </div>
+        </div>
+        <div>
+          <label>Platform Subscriptions</label>
+          <div style="position:relative;">
+            <span class="input-prefix">$</span>
+            <input id="inp-platform" class="input-field has-prefix" type="number" min="0" value="400" placeholder="e.g. WeddingPro">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <label>Content Creation Costs</label>
+        <div style="position:relative;">
+          <span class="input-prefix">$</span>
+          <input id="inp-content" class="input-field has-prefix" type="number" min="0" value="250">
+        </div>
+      </div>
+
+      <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div>
+          <label>Hours/month on Inquiries</label>
+          <input id="inp-hours" class="input-field" type="number" min="0" value="10">
+        </div>
+        <div>
+          <label>Your Hourly Rate</label>
+          <div style="position:relative;">
+            <span class="input-prefix">$</span>
+            <input id="inp-hourly" class="input-field has-prefix" type="number" min="0" value="25">
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div style="font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">And your results last month</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div>
+          <label>Number of Bookings</label>
+          <input id="inp-bookings" class="input-field" type="number" min="1" value="10">
+        </div>
+        <div>
+          <label>Avg Booking Value</label>
+          <div style="position:relative;">
+            <span class="input-prefix">$</span>
+            <input id="inp-value" class="input-field has-prefix" type="number" min="0" value="1500">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: Metric Cards ── -->
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div class="section-title" style="padding-bottom:2px;">Here's your reality check</div>
+
+      <!-- CAC Card -->
+      <div class="card" style="padding:18px 22px; flex:1;">
+        <div class="metric-label">Your CAC</div>
+        <div id="cac-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">$110</div>
+        <div class="metric-caption">That's what each new couple costs you</div>
+      </div>
+
+      <!-- ROI Card -->
+      <div class="card" style="padding:18px 22px; flex:1;">
+        <div class="metric-label">Your ROI Ratio</div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div id="roi-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">13.6x</div>
+          <span id="roi-badge" class="badge badge-green">Strong — room to scale</span>
+        </div>
+        <div class="metric-caption">Avg booking value ÷ cost to acquire</div>
+      </div>
+
+      <!-- Profit Card -->
+      <div class="card" style="padding:18px 22px; flex:1;">
+        <div class="metric-label">Profit per Booking</div>
+        <div id="profit-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">$1,390</div>
+        <div class="metric-caption">What you keep per wedding booked</div>
+      </div>
+    </div>
+
+  </div><!-- /main-grid -->
+
+  <!-- ═══ SECTION 3: Bar Chart + Insight ═══ -->
+  <div class="card" style="padding:22px 26px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px;">
+      <div>
+        <div class="section-title">Where your money is going</div>
+        <div class="section-sub">As % of total monthly spend (time counted as real money)</div>
+      </div>
+      <div id="total-pill" style="font-size:12px; font-weight:700; background:var(--purple-light); color:var(--purple); padding:5px 12px; border-radius:100px; white-space:nowrap;">
+        Total: $1,100/mo
+      </div>
+    </div>
+
+    <div id="bar-chart" style="display:flex; flex-direction:column; gap:9px; margin-bottom:16px;"></div>
+
+    <div class="insight-box">
+      <div class="insight-label">Insight</div>
+      <div id="insight-text" class="insight-text"></div>
+    </div>
+  </div>
+
+  <footer style="text-align:center; margin-top:14px;">
+    <span style="font-size:11px; color:#C0B8D0;">Built for Photoroom · Internal demo</span>
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+  // ─── Constants ───────────────────────────────────────────────────
+  const DEFAULTS = { ads:200, platform:400, content:250, hours:10, hourly:25, bookings:10, value:1500 };
+
+  const BAR_DEFS = [
+    { key:'ads',      label:'Paid Ads',               color:'#5C2F8A' },
+    { key:'platform', label:'Platform Subscriptions',  color:'#7A4AAD' },
+    { key:'content',  label:'Content Creation',        color:'#B090D4' },
+    { key:'time',     label:'Your Time  ★',            color:'#F5C844' },
+  ];
+
+  // ─── Animation state ─────────────────────────────────────────────
+  const prev = { cac:110, roi:13.6, profit:1390 };
+
+  function animCount(el, from, to, fmt) {
+    if (el._raf) cancelAnimationFrame(el._raf);
+    const duration = 320;
+    const t0 = performance.now();
+    function step(now) {
+      const t  = Math.min((now - t0) / duration, 1);
+      const e  = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      el.textContent = fmt(from + (to - from) * e);
+      if (t < 1) el._raf = requestAnimationFrame(step);
+    }
+    el._raf = requestAnimationFrame(step);
+  }
+
+  function fmtDollar(v) {
+    const r = Math.round(v);
+    return (r < 0 ? '-$' : '$') + Math.abs(r).toLocaleString();
+  }
+  function fmtRatio(v) { return v.toFixed(1) + 'x'; }
+
+  // ─── Core compute ────────────────────────────────────────────────
+  function getValues() {
+    const g = id => parseFloat(document.getElementById('inp-' + id).value) || 0;
+    return {
+      ads:      g('ads'),
+      platform: g('platform'),
+      content:  g('content'),
+      hours:    g('hours'),
+      hourly:   g('hourly'),
+      bookings: Math.max(1, g('bookings')),
+      value:    g('value'),
+    };
+  }
+
+  function compute() {
+    const v = getValues();
+    const timeCost = v.hours * v.hourly;
+    const total    = v.ads + v.platform + v.content + timeCost;
+    const cac      = total / v.bookings;
+    const roi      = cac > 0 ? v.value / cac : 0;
+    const profit   = v.value - cac;
+
+    // ── Animate big numbers ──
+    const cacEl    = document.getElementById('cac-num');
+    const roiEl    = document.getElementById('roi-num');
+    const profitEl = document.getElementById('profit-num');
+
+    animCount(cacEl,    prev.cac,    cac,    fmtDollar);
+    animCount(roiEl,    prev.roi,    roi,    fmtRatio);
+    animCount(profitEl, prev.profit, profit, fmtDollar);
+
+    // Profit color
+    profitEl.style.color = profit < 0 ? '#C62828' : 'var(--charcoal)';
+
+    // ── ROI badge ──
+    const badge = document.getElementById('roi-badge');
+    if (roi >= 5) {
+      badge.className = 'badge badge-green';
+      badge.textContent = 'Strong — room to scale';
+    } else if (roi >= 2) {
+      badge.className = 'badge badge-yellow';
+      badge.textContent = 'Profitable but tight';
+    } else {
+      badge.className = 'badge badge-red';
+      badge.textContent = 'Margins are dangerous';
+    }
+
+    // ── Total pill ──
+    document.getElementById('total-pill').textContent =
+      'Total: $' + Math.round(total).toLocaleString() + '/mo';
+
+    // ── Bar chart ──
+    renderBars(v, total, timeCost);
+
+    // ── Insight ──
+    renderInsight(v, roi, timeCost, total);
+
+    // Update prev
+    prev.cac    = cac;
+    prev.roi    = roi;
+    prev.profit = profit;
+  }
+
+  // ─── Bar chart ───────────────────────────────────────────────────
+  function renderBars(v, total, timeCost) {
+    const amounts = { ads: v.ads, platform: v.platform, content: v.content, time: timeCost };
+    const chart   = document.getElementById('bar-chart');
+
+    BAR_DEFS.forEach((def, i) => {
+      const amount = amounts[def.key] || 0;
+      const pct    = total > 0 ? (amount / total * 100) : 0;
+
+      let row = chart.querySelector(`[data-bar="${i}"]`);
+      if (!row) {
+        row = document.createElement('div');
+        row.setAttribute('data-bar', i);
+        row.style.cssText = 'display:flex; align-items:center; gap:10px;';
+        row.innerHTML = `
+          <div style="width:190px; flex-shrink:0; font-size:12px; color:var(--charcoal); font-weight:500;">${def.label}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:0%; background:${def.color};"></div>
+          </div>
+          <div style="width:110px; flex-shrink:0; text-align:right; font-size:12px;">
+            <span class="bar-pct" style="font-weight:700; color:var(--charcoal);"></span>
+            <span class="bar-dollar" style="color:var(--muted);"></span>
+          </div>
+        `;
+        chart.appendChild(row);
+      }
+
+      // Animate bar width on next frame so CSS transition fires
+      requestAnimationFrame(() => {
+        row.querySelector('.bar-fill').style.width = pct.toFixed(1) + '%';
+      });
+
+      row.querySelector('.bar-pct').textContent   = pct.toFixed(1) + '%';
+      row.querySelector('.bar-dollar').textContent = '  ·  $' + Math.round(amount).toLocaleString();
+    });
+  }
+
+  // ─── Dynamic insight ─────────────────────────────────────────────
+  function renderInsight(v, roi, timeCost, total) {
+    const timePct = total > 0 ? timeCost / total : 0;
+    const maxCost = Math.max(v.ads, v.platform, v.content, timeCost);
+
+    let text;
+    if (timeCost === maxCost && timePct > 0.25) {
+      text = "Your biggest cost isn't ads — it's your time. Every hour spent on unqualified leads compounds. Automating even 20% of inquiry follow-up could save you hundreds per month.";
+    } else if (roi < 2) {
+      text = "Your CAC is eating your margin. Focus on converting the leads you already have before buying more. Even a 10% lift in conversion rate beats doubling your ad budget.";
+    } else if (roi >= 10) {
+      text = "You have real room to scale. At this ROI, more ad spend is likely profitable. Consider testing a 20–30% budget increase and tracking which channel drives the best bookings.";
+    } else {
+      text = "Solid fundamentals. Look at which channel is dragging the average down — cutting underperformers usually beats increasing overall spend.";
+    }
+
+    document.getElementById('insight-text').textContent = text;
+  }
+
+  // ─── Reset & Share ───────────────────────────────────────────────
+  function resetToDefaults() {
+    Object.entries(DEFAULTS).forEach(([key, val]) => {
+      const el = document.getElementById('inp-' + key);
+      if (el) el.value = val;
+    });
+    compute();
+  }
+
+  function shareResults() {
+    const v       = getValues();
+    const time    = v.hours * v.hourly;
+    const total   = v.ads + v.platform + v.content + time;
+    const cac     = total / v.bookings;
+    const roi     = cac > 0 ? v.value / cac : 0;
+    const profit  = v.value - cac;
+
+    const text = [
+      '📊 My Wedding Business ROI — via The ROI Roadmap',
+      '',
+      `Monthly spend:    $${Math.round(total).toLocaleString()}`,
+      `CAC per booking:  $${Math.round(cac).toLocaleString()}`,
+      `ROI ratio:        ${roi.toFixed(1)}x`,
+      `Profit/booking:   $${Math.round(profit).toLocaleString()}`,
+    ].join('\n');
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('share-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Share results'; }, 2200);
+    }).catch(() => {
+      // Fallback: prompt
+      prompt('Copy this summary:', text);
+    });
+  }
+
+  // ─── Wire up inputs ──────────────────────────────────────────────
+  ['ads','platform','content','hours','hourly','bookings','value'].forEach(id => {
+    document.getElementById('inp-' + id).addEventListener('input', compute);
+  });
+
+  // ─── Boot ────────────────────────────────────────────────────────
+  compute();
+</script>
+</body>
+</html>
