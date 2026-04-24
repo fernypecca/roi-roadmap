@@ -29,7 +29,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Remove number input spinners */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
     input[type=number] { -moz-appearance: textfield; }
@@ -190,20 +189,260 @@
       margin: 14px 0;
     }
 
-    /* Responsive: stack on mobile */
     @media (max-width: 1023px) {
-      .main-grid { grid-template-columns: 1fr !important; }
+      .main-grid  { grid-template-columns: 1fr !important; }
+      .sim-grid   { grid-template-columns: 1fr !important; }
+    }
+
+    /* ── Simulator ─────────────────────────────────── */
+    .slider-group { margin-bottom: 22px; }
+    .slider-group:last-child { margin-bottom: 0; }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .slider-label { font-size: 13px; font-weight: 600; color: var(--charcoal); }
+    .slider-value {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--purple);
+      font-variant-numeric: tabular-nums;
+      min-width: 44px;
+      text-align: right;
+    }
+    .slider-sub { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      background: var(--purple-light);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--purple);
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 1px 6px rgba(92,47,138,0.35);
+      transition: transform 0.1s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    input[type=range]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--purple);
+      border: 3px solid white;
+      box-shadow: 0 1px 6px rgba(92,47,138,0.35);
+    }
+
+    .sim-compare-row {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .sim-compare-row:last-of-type { border-bottom: none; padding-bottom: 0; }
+    .sim-row-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .sim-old {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #C0B8D0;
+      text-decoration: line-through;
+      font-variant-numeric: tabular-nums;
+    }
+    .sim-arrow { font-size: 1rem; color: #C0B8D0; margin: 0 10px; }
+    .sim-new {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--purple);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .sim-delta {
+      margin-top: 18px;
+      padding: 13px 18px;
+      background: var(--yellow-light);
+      border: 1.5px solid var(--yellow);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--charcoal);
+      text-align: center;
+    }
+
+    /* ── AI Ad Generator ───────────────────────────── */
+    .ai-initial {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 6px 0;
+    }
+    .ai-pitch {
+      font-size: 14px;
+      color: #4A4550;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .ai-text-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--charcoal);
+      background: #FEFEFE;
+      margin-bottom: 12px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      font-family: inherit;
+    }
+    .ai-text-input:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(92,47,138,0.12);
+    }
+    .ai-generate-btn {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      background: var(--purple);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .ai-generate-btn:hover  { background: var(--purple-mid); }
+    .ai-generate-btn:active { transform: scale(0.98); }
+    .demo-note { font-size: 11px; color: var(--muted); margin-top: 10px; }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 44px 20px;
+      gap: 16px;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--purple-light);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-msg {
+      font-size: 14px;
+      color: var(--muted);
+      transition: opacity 0.3s;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 2px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      margin-bottom: -1px;
+      font-family: inherit;
+    }
+    .tab-btn.active { color: var(--purple); border-bottom-color: var(--purple); }
+    .tab-btn:hover:not(.active) { color: var(--charcoal); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .ad-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      background: #FDFCFF;
+    }
+    .ad-card:last-child { margin-bottom: 0; }
+    .ad-headline { font-size: 14px; font-weight: 700; color: var(--charcoal); margin-bottom: 6px; }
+    .ad-body { font-size: 13px; color: #4A4550; line-height: 1.55; margin-bottom: 10px; }
+    .ad-cta-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--purple-light);
+      color: var(--purple);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .ad-hl-item { display: block; font-size: 13px; font-weight: 600; color: var(--charcoal); padding: 2px 0; }
+    .ad-desc-item { display: block; font-size: 13px; color: #4A4550; line-height: 1.5; padding: 2px 0; }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .copy-btn:hover { background: var(--purple-xlight); border-color: var(--purple-light); color: var(--purple); }
+    .copy-btn.copied { background: #E8F5E9; border-color: #A5D6A7; color: #2E7D32; }
+
+    .ip-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--purple-mid);
+      margin-bottom: 8px;
+    }
+    .ip-text {
+      font-size: 13px;
+      color: #4A4550;
+      line-height: 1.65;
+      background: var(--purple-xlight);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
 
-<div style="max-width: 1100px; margin: 0 auto; padding: 20px 24px 24px;">
+<div style="max-width: 1100px; margin: 0 auto; padding: 20px 24px 32px;">
 
   <!-- ═══ HEADER ═══ -->
   <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
     <div>
-      <!-- WeddingPro official wordmark -->
       <svg xmlns="http://www.w3.org/2000/svg" width="177" height="29" fill="none" viewBox="0 0 177 29" style="display:block; width:180px; height:auto; margin-bottom:6px;"><path fill="#1C1C1C" d="m18.378 14.246-4.01-12.15h-2.815l-4.01 12.15-3.85-11.955-.05-.146H0l5.972 17.33.048.134h2.876l4.01-11.748 3.973 11.614.049.134h2.876l5.935-17.196.085-.268h-3.546l-3.9 12.101ZM31.235 12.309h8.494V9.213h-8.494V5.216h9.579V2.145H27.859v17.342h13.077v-3.071h-9.7v-4.107ZM49.978 2.145h-6.52v17.342h6.52c2.596 0 4.96-.89 6.642-2.498 1.658-1.585 2.572-3.778 2.572-6.167v-.049c-.012-4.996-3.876-8.628-9.214-8.628Zm5.68 8.677v.049c0 1.584-.537 2.949-1.548 3.948-1.024 1.012-2.462 1.548-4.132 1.548h-3.132V5.265h3.133c1.67 0 3.095.548 4.13 1.572 1 1 1.549 2.413 1.549 3.985ZM67.857 2.145h-6.52v17.342h6.52c2.596 0 4.96-.89 6.642-2.498 1.657-1.585 2.571-3.778 2.571-6.167v-.049c-.012-4.996-3.875-8.628-9.213-8.628Zm5.679 8.677v.049c0 1.584-.536 2.949-1.548 3.948-1.023 1.012-2.462 1.548-4.131 1.548h-3.132V5.265h3.132c1.67 0 3.095.548 4.131 1.572 1 1 1.548 2.413 1.548 3.985ZM82.627 2.145H79.24v17.342h3.388V2.145ZM97.105 13.466 88.392 2.219l-.061-.073h-3.06v17.342H88.6V7.837l8.982 11.577.06.073h2.791V2.145h-3.327v11.322ZM111.279 12.638h4.326v2.84c-1.06.767-2.449 1.182-3.887 1.182-1.621 0-3.023-.573-4.034-1.658-.987-1.048-1.524-2.547-1.524-4.192v-.049c0-3.23 2.328-5.752 5.289-5.752 2.097 0 3.315.67 4.607 1.743l.159.134 2.144-2.56-.158-.134c-1.962-1.67-3.888-2.352-6.642-2.352-2.486 0-4.765.95-6.422 2.67-1.621 1.669-2.511 3.911-2.511 6.3v.049c0 2.473.878 4.728 2.462 6.349 1.645 1.682 3.9 2.56 6.52 2.56 3.351 0 5.764-1.463 7.202-2.682l.073-.06v-7.41h-7.616v3.022h.012ZM176.174 3.132l.244-.183-1.779-2.425-.244.183c-5.411 3.985-14.113 1.255-14.612 1.097l-2.596-1.06-4.351 10.431c-.524 1.22-1.243 2.145-1.657 2.413-.354.22-.646.293-.878.195-.329-.134-.512-.609-.548-.767-.183-.744-.171-1.89.049-3.632.255-2.035.926-4.655.938-4.68l.037-.158-1.548-1.78-.159.025c-.926.134-1.681.012-2.218-.366-.828-.585-1.011-2.108-1.011-2.12L145.804 0l-3.132.292-.024.244c-.366 3.242-1.292 7.873-5.033 11.675.414-1.377.597-2.851.536-4.338-.085-1.901-.768-3.571-1.926-4.704-.999-.975-2.242-1.463-3.583-1.402-1.584.073-3.254.938-4.448 2.316-.816.95-1.548 2.096-2.218 3.497-.597-3.449-1.596-5.009-2.169-5.642l-.207-.232-2.011 1.816-.232.207.207.232c.342.426 2.133 4.606 1.707 12.857l-.5 11.882h3.022l.439-9.08c1.097 0 3.583-.12 5.094-.51.561-.123 3.388-.793 6.386-3.048 2.486-1.864 5.728-5.325 7.227-11.321a5.247 5.247 0 0 0 2.401 1.011 28.939 28.939 0 0 0-.646 4.46 15.615 15.615 0 0 0 .061 2.962c.097.792.292 1.438.597 1.962a3.127 3.127 0 0 0 1.377 1.292c1.158.548 2.462.439 3.681-.33.109-.06 1.096-.657 1.889-2.01.121.646.304 1.268.536 1.84.804 2.023 2.388 3.522 4.338 4.083a5.998 5.998 0 0 0 1.658.244c1.182 0 2.303-.366 3.339-1.097 1.158-.805 2.035-1.987 2.559-3.425 1.121-3.12.439-6.946-1.73-9.956 1.901.219 7.263.316 11.175-2.645Zm-12.309 11.663a3.799 3.799 0 0 1-1.438 1.962c-.768.536-1.56.682-2.425.427-1.036-.305-1.926-1.17-2.389-2.316l-.012-.024c0-.012-.439-.89-.512-2.608-.061-1.56.171-4.12 1.609-7.617.646.268 2.352 1.084 3.534 2.608 2.389 3.095 2.206 5.825 1.633 7.568Zm-32.502 1.024c-1.377.78-2.998 1.072-4.802.865.244-1.974.536-3.656 1.097-5.301 1.267-3.693 2.779-5.29 2.791-5.302l.012-.012c.658-.755 1.535-1.243 2.303-1.28.512-.024.951.159 1.353.549.817.792.987 2.01 1.024 2.669.146 3.376-1.341 6.434-3.778 7.812Z"/></svg>
       <p style="font-size:12px; color:var(--muted); margin:0; letter-spacing:0.01em;">The ROI Roadmap · Calculate your true cost per booking</p>
     </div>
@@ -213,10 +452,10 @@
     </div>
   </header>
 
-  <!-- ═══ MAIN GRID: Inputs (left) + Metrics (right) ═══ -->
+  <!-- ═══ MAIN GRID: Inputs + Metrics ═══ -->
   <div class="main-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
 
-    <!-- ── SECTION 1: Inputs ── -->
+    <!-- SECTION 1: Inputs -->
     <div class="card" style="padding:24px 26px;">
       <div class="section-title">What are you actually spending?</div>
       <div class="section-sub">Monthly figures — estimates are fine</div>
@@ -279,18 +518,16 @@
       </div>
     </div>
 
-    <!-- ── SECTION 2: Metric Cards ── -->
+    <!-- SECTION 2: Metric Cards -->
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div class="section-title" style="padding-bottom:2px;">Here's your reality check</div>
 
-      <!-- CAC Card -->
       <div class="card" style="padding:18px 22px; flex:1;">
         <div class="metric-label">Your CAC</div>
         <div id="cac-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">$110</div>
         <div class="metric-caption">That's what each new couple costs you</div>
       </div>
 
-      <!-- ROI Card -->
       <div class="card" style="padding:18px 22px; flex:1;">
         <div class="metric-label">Your ROI Ratio</div>
         <div style="display:flex; align-items:center; gap:10px;">
@@ -300,7 +537,6 @@
         <div class="metric-caption">Avg booking value ÷ cost to acquire</div>
       </div>
 
-      <!-- Profit Card -->
       <div class="card" style="padding:18px 22px; flex:1;">
         <div class="metric-label">Profit per Booking</div>
         <div id="profit-num" class="big-num" style="font-size:2.8rem; font-weight:800; color:var(--charcoal);">$1,390</div>
@@ -308,10 +544,10 @@
       </div>
     </div>
 
-  </div><!-- /main-grid -->
+  </div>
 
-  <!-- ═══ SECTION 3: Bar Chart + Insight ═══ -->
-  <div class="card" style="padding:22px 26px;">
+  <!-- SECTION 3: Bar Chart + Insight -->
+  <div class="card" style="padding:22px 26px; margin-bottom:16px;">
     <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px;">
       <div>
         <div class="section-title">Where your money is going</div>
@@ -330,13 +566,137 @@
     </div>
   </div>
 
-  <footer style="text-align:center; margin-top:14px;">
+  <!-- ═══ FEATURE 1: Before/After Simulator ═══ -->
+  <div class="card" style="padding:24px 26px; margin-bottom:16px;">
+    <div style="margin-bottom:22px;">
+      <div class="section-title">What if you optimized?</div>
+      <div class="section-sub">Drag the sliders. Watch your numbers move.</div>
+    </div>
+
+    <div class="sim-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start;">
+
+      <!-- LEFT: Sliders -->
+      <div>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Conversion lift</span>
+            <span class="slider-value" id="sl-conv-val">0%</span>
+          </div>
+          <div class="slider-sub">Convert X% more of your current inquiries into bookings</div>
+          <input type="range" id="sl-conv" min="0" max="50" step="5" value="0">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Time efficiency</span>
+            <span class="slider-value" id="sl-time-val">0%</span>
+          </div>
+          <div class="slider-sub">Cut time spent on unqualified leads by X%</div>
+          <input type="range" id="sl-time" min="0" max="75" step="5" value="0">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Price increase</span>
+            <span class="slider-value" id="sl-price-val">0%</span>
+          </div>
+          <div class="slider-sub">Raise your average booking value by X%</div>
+          <input type="range" id="sl-price" min="0" max="30" step="5" value="0">
+        </div>
+      </div>
+
+      <!-- RIGHT: Comparison -->
+      <div>
+        <div class="sim-compare-row">
+          <div class="sim-row-label">CAC</div>
+          <div style="display:flex; align-items:center;">
+            <span id="sim-cac-old" class="sim-old">$110</span>
+            <span class="sim-arrow">→</span>
+            <span id="sim-cac-new" class="sim-new">$110</span>
+          </div>
+        </div>
+
+        <div class="sim-compare-row">
+          <div class="sim-row-label">ROI Ratio</div>
+          <div style="display:flex; align-items:center;">
+            <span id="sim-roi-old" class="sim-old">13.6x</span>
+            <span class="sim-arrow">→</span>
+            <span id="sim-roi-new" class="sim-new">13.6x</span>
+          </div>
+        </div>
+
+        <div class="sim-compare-row">
+          <div class="sim-row-label">Monthly Profit</div>
+          <div style="display:flex; align-items:center;">
+            <span id="sim-profit-old" class="sim-old">$13,900</span>
+            <span class="sim-arrow">→</span>
+            <span id="sim-profit-new" class="sim-new">$13,900</span>
+          </div>
+        </div>
+
+        <div id="sim-delta" class="sim-delta" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ FEATURE 2: AI Ad Generator ═══ -->
+  <div class="card" style="padding:24px 26px; margin-bottom:16px;">
+    <div style="margin-bottom:22px;">
+      <div class="section-title">Generate ads built for your numbers</div>
+      <div class="section-sub">Based on your CAC, booking value, and market position, here's what we'd run.</div>
+    </div>
+
+    <!-- Initial -->
+    <div id="ai-initial">
+      <div class="ai-initial">
+        <p class="ai-pitch">We'll write 3 Meta ad variants, 3 Google search ads, and a hero image prompt — tailored to your exact situation.</p>
+        <input type="text" id="ai-couple-desc" class="ai-text-input" placeholder="e.g., destination weddings in Tuscany, $5K+ budget, couples aged 28–35">
+        <button class="ai-generate-btn" onclick="generateAds()">Generate my ads →</button>
+        <p id="ai-demo-note" class="demo-note" style="display:none;">Demo mode — add your API key in the script for live AI generation.</p>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="ai-loading" style="display:none;">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <div id="loading-msg" class="loading-msg">Analyzing your CAC profile...</div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="ai-results" style="display:none;">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('meta')">Meta Ads</button>
+        <button class="tab-btn" onclick="switchTab('google')">Google Ads</button>
+        <button class="tab-btn" onclick="switchTab('image')">Image Prompt</button>
+      </div>
+      <div id="tab-meta"   class="tab-panel active"></div>
+      <div id="tab-google" class="tab-panel"></div>
+      <div id="tab-image"  class="tab-panel"></div>
+      <div style="text-align:center; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+        <button class="btn-ghost" onclick="resetAds()">← Generate new ads</button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div id="ai-error" style="display:none; text-align:center; padding:36px 20px;">
+      <p style="color:var(--muted); font-size:14px; margin-bottom:14px;">Couldn't generate ads — try again</p>
+      <button class="btn-ghost" onclick="resetAds()">Retry</button>
+    </div>
+  </div>
+
+  <footer style="text-align:center; margin-top:8px;">
     <span style="font-size:11px; color:#C0B8D0;">Built for Photoroom · Internal demo</span>
   </footer>
 
-</div><!-- /container -->
+</div>
 
 <script>
+  // ─── API Key ──────────────────────────────────────────────────────
+  const ANTHROPIC_API_KEY = ""; // Paste key here for live AI generation
+
   // ─── Constants ───────────────────────────────────────────────────
   const DEFAULTS = { ads:200, platform:400, content:250, hours:10, hourly:25, bookings:10, value:1500 };
 
@@ -347,16 +707,17 @@
     { key:'time',     label:'Your Time  ★',            color:'#F5C844' },
   ];
 
-  // ─── Animation state ─────────────────────────────────────────────
+  // ─── Animation ───────────────────────────────────────────────────
   const prev = { cac:110, roi:13.6, profit:1390 };
+  const simPrev = { cac:110, roi:13.6, profit:13900 };
 
   function animCount(el, from, to, fmt) {
     if (el._raf) cancelAnimationFrame(el._raf);
-    const duration = 320;
+    const duration = 250;
     const t0 = performance.now();
     function step(now) {
-      const t  = Math.min((now - t0) / duration, 1);
-      const e  = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const t = Math.min((now - t0) / duration, 1);
+      const e = 1 - Math.pow(1 - t, 3);
       el.textContent = fmt(from + (to - from) * e);
       if (t < 1) el._raf = requestAnimationFrame(step);
     }
@@ -391,7 +752,6 @@
     const roi      = cac > 0 ? v.value / cac : 0;
     const profit   = v.value - cac;
 
-    // ── Animate big numbers ──
     const cacEl    = document.getElementById('cac-num');
     const roiEl    = document.getElementById('roi-num');
     const profitEl = document.getElementById('profit-num');
@@ -400,10 +760,8 @@
     animCount(roiEl,    prev.roi,    roi,    fmtRatio);
     animCount(profitEl, prev.profit, profit, fmtDollar);
 
-    // Profit color
     profitEl.style.color = profit < 0 ? '#C62828' : 'var(--charcoal)';
 
-    // ── ROI badge ──
     const badge = document.getElementById('roi-badge');
     if (roi >= 5) {
       badge.className = 'badge badge-green';
@@ -416,20 +774,17 @@
       badge.textContent = 'Margins are dangerous';
     }
 
-    // ── Total pill ──
     document.getElementById('total-pill').textContent =
       'Total: $' + Math.round(total).toLocaleString() + '/mo';
 
-    // ── Bar chart ──
     renderBars(v, total, timeCost);
-
-    // ── Insight ──
     renderInsight(v, roi, timeCost, total);
 
-    // Update prev
     prev.cac    = cac;
     prev.roi    = roi;
     prev.profit = profit;
+
+    computeSim();
   }
 
   // ─── Bar chart ───────────────────────────────────────────────────
@@ -448,32 +803,25 @@
         row.style.cssText = 'display:flex; align-items:center; gap:10px;';
         row.innerHTML = `
           <div style="width:190px; flex-shrink:0; font-size:12px; color:var(--charcoal); font-weight:500;">${def.label}</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width:0%; background:${def.color};"></div>
-          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%; background:${def.color};"></div></div>
           <div style="width:110px; flex-shrink:0; text-align:right; font-size:12px;">
             <span class="bar-pct" style="font-weight:700; color:var(--charcoal);"></span>
             <span class="bar-dollar" style="color:var(--muted);"></span>
-          </div>
-        `;
+          </div>`;
         chart.appendChild(row);
       }
-
-      // Animate bar width on next frame so CSS transition fires
       requestAnimationFrame(() => {
         row.querySelector('.bar-fill').style.width = pct.toFixed(1) + '%';
       });
-
-      row.querySelector('.bar-pct').textContent   = pct.toFixed(1) + '%';
+      row.querySelector('.bar-pct').textContent    = pct.toFixed(1) + '%';
       row.querySelector('.bar-dollar').textContent = '  ·  $' + Math.round(amount).toLocaleString();
     });
   }
 
-  // ─── Dynamic insight ─────────────────────────────────────────────
+  // ─── Insight ─────────────────────────────────────────────────────
   function renderInsight(v, roi, timeCost, total) {
     const timePct = total > 0 ? timeCost / total : 0;
     const maxCost = Math.max(v.ads, v.platform, v.content, timeCost);
-
     let text;
     if (timeCost === maxCost && timePct > 0.25) {
       text = "Your biggest cost isn't ads — it's your time. Every hour spent on unqualified leads compounds. Automating even 20% of inquiry follow-up could save you hundreds per month.";
@@ -484,7 +832,6 @@
     } else {
       text = "Solid fundamentals. Look at which channel is dragging the average down — cutting underperformers usually beats increasing overall spend.";
     }
-
     document.getElementById('insight-text').textContent = text;
   }
 
@@ -494,17 +841,23 @@
       const el = document.getElementById('inp-' + key);
       if (el) el.value = val;
     });
+    // Reset sliders
+    ['sl-conv','sl-time','sl-price'].forEach(id => {
+      document.getElementById(id).value = 0;
+    });
+    updateAllSliderTracks();
+    // Clear ads
+    resetAds();
     compute();
   }
 
   function shareResults() {
-    const v       = getValues();
-    const time    = v.hours * v.hourly;
-    const total   = v.ads + v.platform + v.content + time;
-    const cac     = total / v.bookings;
-    const roi     = cac > 0 ? v.value / cac : 0;
-    const profit  = v.value - cac;
-
+    const v      = getValues();
+    const time   = v.hours * v.hourly;
+    const total  = v.ads + v.platform + v.content + time;
+    const cac    = total / v.bookings;
+    const roi    = cac > 0 ? v.value / cac : 0;
+    const profit = v.value - cac;
     const text = [
       '📊 My Wedding Business ROI — via The ROI Roadmap',
       '',
@@ -513,21 +866,359 @@
       `ROI ratio:        ${roi.toFixed(1)}x`,
       `Profit/booking:   $${Math.round(profit).toLocaleString()}`,
     ].join('\n');
-
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById('share-btn');
       btn.textContent = 'Copied!';
       setTimeout(() => { btn.textContent = 'Share results'; }, 2200);
-    }).catch(() => {
-      // Fallback: prompt
-      prompt('Copy this summary:', text);
-    });
+    }).catch(() => { prompt('Copy this summary:', text); });
   }
 
-  // ─── Wire up inputs ──────────────────────────────────────────────
+  // ─── Wire up main inputs ─────────────────────────────────────────
   ['ads','platform','content','hours','hourly','bookings','value'].forEach(id => {
     document.getElementById('inp-' + id).addEventListener('input', compute);
   });
+
+  // ═══════════════════════════════════════════════════════════════
+  // FEATURE 1 — Before/After Simulator
+  // ═══════════════════════════════════════════════════════════════
+
+  function updateSliderTrack(id, value, max) {
+    const pct = Math.round((value / max) * 100);
+    document.getElementById(id).style.background =
+      `linear-gradient(to right, var(--purple) 0%, var(--purple) ${pct}%, var(--purple-light) ${pct}%, var(--purple-light) 100%)`;
+  }
+
+  function updateAllSliderTracks() {
+    updateSliderTrack('sl-conv',  parseFloat(document.getElementById('sl-conv').value),  50);
+    updateSliderTrack('sl-time',  parseFloat(document.getElementById('sl-time').value),  75);
+    updateSliderTrack('sl-price', parseFloat(document.getElementById('sl-price').value), 30);
+  }
+
+  function computeSim() {
+    const v = getValues();
+    const timeCost = v.hours * v.hourly;
+    const total    = v.ads + v.platform + v.content + timeCost;
+
+    const convLift  = parseFloat(document.getElementById('sl-conv').value)  / 100;
+    const timeEff   = parseFloat(document.getElementById('sl-time').value)  / 100;
+    const priceInc  = parseFloat(document.getElementById('sl-price').value) / 100;
+
+    document.getElementById('sl-conv-val').textContent  = Math.round(convLift  * 100) + '%';
+    document.getElementById('sl-time-val').textContent  = Math.round(timeEff   * 100) + '%';
+    document.getElementById('sl-price-val').textContent = Math.round(priceInc  * 100) + '%';
+
+    updateAllSliderTracks();
+
+    // Before
+    const oldCAC    = v.bookings > 0 ? total / v.bookings : 0;
+    const oldROI    = oldCAC > 0 ? v.value / oldCAC : 0;
+    const oldProfit = v.bookings * v.value - total;
+
+    // After
+    const newBookings = v.bookings * (1 + convLift);
+    const newTimeCost = timeCost   * (1 - timeEff);
+    const newTotal    = v.ads + v.platform + v.content + newTimeCost;
+    const newCAC      = newBookings > 0 ? newTotal / newBookings : 0;
+    const newAvgValue = v.value * (1 + priceInc);
+    const newROI      = newCAC > 0 ? newAvgValue / newCAC : 0;
+    const newProfit   = newBookings * newAvgValue - newTotal;
+
+    // Update "before" (static, no animation needed)
+    document.getElementById('sim-cac-old').textContent    = fmtDollar(oldCAC);
+    document.getElementById('sim-roi-old').textContent    = fmtRatio(oldROI);
+    document.getElementById('sim-profit-old').textContent = fmtDollar(oldProfit);
+
+    // Animate "after"
+    animCount(document.getElementById('sim-cac-new'),    simPrev.cac,    newCAC,    fmtDollar);
+    animCount(document.getElementById('sim-roi-new'),    simPrev.roi,    newROI,    fmtRatio);
+    animCount(document.getElementById('sim-profit-new'), simPrev.profit, newProfit, fmtDollar);
+
+    simPrev.cac    = newCAC;
+    simPrev.roi    = newROI;
+    simPrev.profit = newProfit;
+
+    // Delta callout
+    const delta   = newProfit - oldProfit;
+    const deltaEl = document.getElementById('sim-delta');
+    if (delta > 1) {
+      deltaEl.style.display = 'block';
+      deltaEl.textContent   = `That's ${fmtDollar(delta)} more in your pocket every month.`;
+    } else {
+      deltaEl.style.display = 'none';
+    }
+  }
+
+  ['sl-conv','sl-time','sl-price'].forEach(id => {
+    document.getElementById(id).addEventListener('input', computeSim);
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  // FEATURE 2 — AI Ad Generator
+  // ═══════════════════════════════════════════════════════════════
+
+  let currentAds      = null;
+  let loadingInterval = null;
+
+  const LOADING_MSGS = [
+    "Analyzing your CAC profile...",
+    "Reading 10,000 winning wedding ads...",
+    "Writing copy that matches your margins...",
+  ];
+
+  function setAiState(state) {
+    ['initial','loading','results','error'].forEach(s => {
+      document.getElementById('ai-' + s).style.display = (s === state) ? '' : 'none';
+    });
+  }
+
+  function resetAds() {
+    clearInterval(loadingInterval);
+    currentAds = null;
+    setAiState('initial');
+    document.getElementById('ai-demo-note').style.display = 'none';
+  }
+
+  async function generateAds() {
+    const descEl = document.getElementById('ai-couple-desc');
+    const desc   = descEl.value.trim();
+
+    if (!desc) {
+      descEl.focus();
+      descEl.style.borderColor = '#C62828';
+      setTimeout(() => { descEl.style.borderColor = ''; }, 1500);
+      return;
+    }
+
+    setAiState('loading');
+
+    // Rotate loading messages
+    let msgIdx = 0;
+    const msgEl = document.getElementById('loading-msg');
+    msgEl.textContent = LOADING_MSGS[0];
+    loadingInterval = setInterval(() => {
+      msgIdx = (msgIdx + 1) % LOADING_MSGS.length;
+      msgEl.style.opacity = '0';
+      setTimeout(() => {
+        msgEl.textContent  = LOADING_MSGS[msgIdx];
+        msgEl.style.opacity = '1';
+      }, 300);
+    }, 1800);
+
+    const v        = getValues();
+    const timeCost = v.hours * v.hourly;
+    const total    = v.ads + v.platform + v.content + timeCost;
+    const cac      = total / v.bookings;
+    const roi      = cac > 0 ? v.value / cac : 0;
+
+    let adData;
+
+    if (ANTHROPIC_API_KEY) {
+      adData = await fetchAdsFromAPI(cac, v.value, roi, v.bookings, desc);
+    } else {
+      await new Promise(r => setTimeout(r, 2400));
+      adData = getFallbackAds(cac, v.value, roi, v.bookings, desc);
+      document.getElementById('ai-demo-note').style.display = 'block';
+    }
+
+    clearInterval(loadingInterval);
+
+    if (!adData) {
+      setAiState('error');
+      return;
+    }
+
+    currentAds = adData;
+    renderAdResults(adData);
+    setAiState('results');
+    switchTab('meta');
+  }
+
+  async function fetchAdsFromAPI(cac, avgValue, roi, bookings, desc) {
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5',
+          max_tokens: 2000,
+          messages: [{ role: 'user', content: buildPrompt(cac, avgValue, roi, bookings, desc) }],
+        }),
+      });
+      const data = await res.json();
+      let raw = data.content[0].text.trim();
+      raw = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  function buildPrompt(cac, avgValue, roi, bookings, desc) {
+    return `You are a senior direct-response copywriter who specializes in the wedding industry.
+Write ads for a wedding vendor with these exact numbers:
+
+- Monthly CAC: $${Math.round(cac)}
+- Average booking value: $${Math.round(avgValue)}
+- ROI ratio: ${roi.toFixed(1)}x
+- Current monthly bookings: ${bookings}
+- Ideal couple: ${desc}
+
+Strategic context:
+- If ROI ratio > 8x: Write aspirational, brand-led copy. They can afford to invest in awareness.
+- If ROI ratio 3-8x: Write conversion-focused copy with clear value props and social proof hooks.
+- If ROI ratio < 3x: Write tight, bottom-of-funnel copy targeting high-intent couples only. No fluff.
+
+Return ONLY valid JSON in this exact structure (no markdown, no preamble):
+
+{
+  "meta_ads": [
+    { "headline": "...", "primary_text": "...", "cta": "Book Now" },
+    { "headline": "...", "primary_text": "...", "cta": "Learn More" },
+    { "headline": "...", "primary_text": "...", "cta": "Get Quote" }
+  ],
+  "google_ads": [
+    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."] },
+    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."] },
+    { "headlines": ["...", "...", "..."], "descriptions": ["...", "..."] }
+  ],
+  "image_prompt_detailed": "...",
+  "image_prompt_social": "..."
+}
+
+Respect character limits: Meta headlines ≤40 chars, Meta primary text ≤125 chars, Google headlines ≤30 chars, Google descriptions ≤90 chars. Write like a human, not a marketer. No emojis unless they fit the couple's vibe.`;
+  }
+
+  function getFallbackAds(cac, avgValue, roi, bookings, desc) {
+    const val  = Math.round(avgValue).toLocaleString();
+    const bk   = Math.round(bookings);
+    const yr   = Math.round(bookings * 12);
+    const slug = desc.split(',')[0];
+    return {
+      meta_ads: [
+        {
+          headline: "Your wedding, done right",
+          primary_text: `Couples who book with us spend an average of $${val} on a day they talk about forever. Limited dates available this season.`,
+          cta: "Book Now"
+        },
+        {
+          headline: `Only ${bk} couples per month`,
+          primary_text: `Because your wedding isn't a number. See our work, meet our team, and decide if we're the right fit — no pressure, no hard sell.`,
+          cta: "Learn More"
+        },
+        {
+          headline: "Real weddings. Real results.",
+          primary_text: `Over ${yr}+ couples trusted us last year. Here's what they said — and what their day actually looked like.`,
+          cta: "See Our Work"
+        }
+      ],
+      google_ads: [
+        {
+          headlines: ["Wedding Vendor You'll Love", "Trusted by Local Couples", `From $${val} Per Event`],
+          descriptions: [
+            "Personalized service for your wedding day. View availability and book a free consultation today.",
+            "Real reviews from real couples. See why we're the top-rated choice in your area."
+          ]
+        },
+        {
+          headlines: ["Limited Dates This Season", "Book Before They're Gone", "Award-Winning Wedding Team"],
+          descriptions: [
+            "We take a limited number of couples per season so every event gets our full attention.",
+            `Starting at $${val}. Request a custom quote based on your vision and budget.`
+          ]
+        },
+        {
+          headlines: ["Your Day, Your Vision", "Expert Wedding Planning", "Free Consultation Today"],
+          descriptions: [
+            "We listen before we plan. Tell us about your ideal day and we'll show you how to make it real.",
+            "No cookie-cutter packages. Every wedding we do is built around what matters most to you."
+          ]
+        }
+      ],
+      image_prompt_detailed: `A photorealistic wedding scene: ${desc}. Golden hour lighting, soft bokeh background, editorial style photography. Bride and groom in a genuine emotional moment, not posed. Shot on medium format camera, warm tones, film-inspired color grading. Clean negative space in upper third for text overlay. Aspect ratio 4:5 for Instagram feed. Hyper-detailed, high resolution.`,
+      image_prompt_social: `Elegant wedding couple, golden hour light, editorial photography, warm film tones. ${slug}. Minimal, space for text overlay at top. 4:5 ratio.`
+    };
+  }
+
+  function renderAdResults(data) {
+    // Meta Ads
+    document.getElementById('tab-meta').innerHTML = data.meta_ads.map((ad, i) => `
+      <div class="ad-card">
+        <div class="ad-headline">${escHtml(ad.headline)}</div>
+        <div class="ad-body">${escHtml(ad.primary_text)}</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <span class="ad-cta-pill">${escHtml(ad.cta)}</span>
+          <button class="copy-btn" onclick="copyAdText('meta',${i},this)">Copy</button>
+        </div>
+      </div>`).join('');
+
+    // Google Ads
+    document.getElementById('tab-google').innerHTML = data.google_ads.map((ad, i) => `
+      <div class="ad-card">
+        <div class="ad-headlines-list" style="margin-bottom:8px;">
+          ${ad.headlines.map(h => `<span class="ad-hl-item">${escHtml(h)}</span>`).join('')}
+        </div>
+        <div style="margin-bottom:10px;">
+          ${ad.descriptions.map(d => `<span class="ad-desc-item">${escHtml(d)}</span>`).join('')}
+        </div>
+        <div style="text-align:right;">
+          <button class="copy-btn" onclick="copyAdText('google',${i},this)">Copy all</button>
+        </div>
+      </div>`).join('');
+
+    // Image Prompts
+    document.getElementById('tab-image').innerHTML = `
+      <div style="margin-bottom:16px;">
+        <div class="ip-label">Detailed Prompt — Midjourney / DALL·E / Photoroom</div>
+        <div class="ip-text">${escHtml(data.image_prompt_detailed)}</div>
+        <button class="copy-btn" onclick="copyAdText('image',0,this)">Copy prompt</button>
+      </div>
+      <div>
+        <div class="ip-label">Quick Social Post Prompt</div>
+        <div class="ip-text">${escHtml(data.image_prompt_social)}</div>
+        <button class="copy-btn" onclick="copyAdText('image',1,this)">Copy prompt</button>
+      </div>`;
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function copyAdText(type, index, btn) {
+    if (!currentAds) return;
+    let text = '';
+    if (type === 'meta') {
+      const ad = currentAds.meta_ads[index];
+      text = `${ad.headline}\n\n${ad.primary_text}\n\nCTA: ${ad.cta}`;
+    } else if (type === 'google') {
+      const ad = currentAds.google_ads[index];
+      text = `Headlines:\n${ad.headlines.join('\n')}\n\nDescriptions:\n${ad.descriptions.join('\n')}`;
+    } else if (type === 'image') {
+      text = index === 0 ? currentAds.image_prompt_detailed : currentAds.image_prompt_social;
+    }
+    const orig = btn.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function switchTab(tab) {
+    const tabs = ['meta','google','image'];
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', tabs[i] === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+      panel.classList.toggle('active', panel.id === 'tab-' + tab);
+    });
+  }
 
   // ─── Boot ────────────────────────────────────────────────────────
   compute();
